@@ -1,0 +1,17 @@
+// EOQ
+
+int i:0;
+int j:0;
+int v[3]; 
+
+int main()
+{
+	output "Digite um numero: "
+	input i
+	while (j<3)
+	{
+		v[j] = i + 5
+		j = j + 1
+	}
+	output "Preenchendo vetor ",v,"\n"
+};

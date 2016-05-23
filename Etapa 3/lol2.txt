@@ -1,0 +1,13 @@
+int main(){
+output "Digite um numero: "
+input i
+while (i < 10)
+{
+a = incn(a, 1)
+i = i + 1}
+output "Incrementado algumas vezes fica ", a, "\n"
+if (a == 5)
+output "Parou no meio\n"};
+int incn(int x, int n) {
+return x + n};
+int voidfunc(); ;
