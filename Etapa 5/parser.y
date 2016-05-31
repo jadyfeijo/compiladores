@@ -88,7 +88,7 @@ FILE *out = NULL;
 
 %%
 
-init: program																{$$ = $1; /*astreePrint($$,0);*/ checkDeclaration($$); checkUsage($$); code_generate(out,$$);}
+init: program																{ $$ = $1;TAC* tac; /*astreePrint($$,0);*/ tac = tacReverse(generateCode($1)); tacPrintListNext(tac); checkDeclaration($$); checkUsage($$); code_generate(out,$$);}
 	;
 
 program: 
