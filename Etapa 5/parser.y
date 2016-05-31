@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "ast.h"
+#include "tac.h"
 #include "semantic.h"
 
 FILE *out = NULL;
