@@ -173,17 +173,18 @@ void tacPrintSingle(TAC* tac)
 	
 	if(tac->res)
 		fprintf(stderr, ",%s", tac->res->text);
-	else
-		fprintf(stderr, ",_");
+//	else
+//		fprintf(stderr, ",_");
 		
 	if(tac->op1)
-		fprintf(stderr, ",%s", tac->op1->text);
-	else
-		fprintf(stderr, ",_");
+        fprintf(stderr, ",%s", tac->op1->text);
+//	else
+//		fprintf(stderr, ",_");
 		
 	if(tac->op2)
 		fprintf(stderr, ",%s", tac->op2->text);
-	else
-		fprintf(stderr, ",_)\n");
+//	else
+		fprintf(stderr, ")\n");
+    
 		
 }
