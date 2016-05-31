@@ -29,7 +29,7 @@ TAC* tacJoin(TAC* tac1, TAC* tac2)
 	aux->prev = tac1;
 	
 	return tac2;
-}//eoq
+}//eoqqq
 
 void tacPrintListPrev(TAC* tac)
 {
