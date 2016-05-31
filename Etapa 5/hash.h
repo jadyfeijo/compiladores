@@ -50,5 +50,6 @@ HASH_NODE *hashInsert(char *text, int type);
 void hashPrint(void);
 void checkUndeclared(void);
 HASH_NODE *makeTemp(void);
+HASH_NODE *makeLabel(void);
 
 #endif //HASH_H

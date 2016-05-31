@@ -110,3 +110,14 @@ HASH_NODE *makeTemp(void)
 	sprintf(buffer, "TempVAR%d", nextTemp++);
 	return (hashInsert(buffer, SYMBOL_VAR));
 }
+
+HASH_NODE *makeLabel(void)
+{
+	static int nextLabel = 0;
+	static charbuffer[256];
+
+	sprintf(buffer, "Label%d", nextLabel++);
+	return (hashInsert(buffer, SYMBOL_LABEL));
+}
+
+
