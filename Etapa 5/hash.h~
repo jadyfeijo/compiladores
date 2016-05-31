@@ -20,8 +20,6 @@
 #define SYMBOL_VEC 308
 #define SYMBOL_FUN 309
 
-#define SYMBOL_LABEL 310
-
 #define DATATYPE_ERROR       0
 #define DATATYPE_INT         1
 #define DATATYPE_REAL        2
@@ -48,7 +46,5 @@ int hashAddress(char *text);
 HASH_NODE *hashFind(char *text);
 HASH_NODE *hashInsert(char *text, int type);
 void hashPrint(void);
-void checkUndeclared(void);
-HASH_NODE *makeTemp(void);
 
 #endif //HASH_H
