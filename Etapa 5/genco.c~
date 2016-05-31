@@ -26,13 +26,13 @@ TAC* generateCode(ASTREE *node) {
 		case ASTREE_SUB: return makeBinOp(TAC_SUB, code[0], code[1]); break;
 		case ASTREE_MUL: return makeBinOp(TAC_MUL, code[0], code[1]); break;
 		case ASTREE_DIV: return makeBinOp(TAC_DIV, code[0], code[1]); break;
-		case ASTREE_ASS: return tacJoin(code[0], tacCreate(TAC_ASS,0,0,0)); break;
+		case ASTREE_ASS: return tacJoin(code[0], tacCreate(TAC_ASS,node->symbol,code[0]?code[0]->res:0,0)); break;
+		case ASTREE_IF: return makeIfThen(code[0], code[1]); break;
         default: break;
     }
     
     return tacJoin(tacJoin(tacJoin(code[0],code[1]),code[2]),code[3]);
-    
-                                        
+                                
                                         
 }
 
