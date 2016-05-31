@@ -28,4 +28,20 @@ TAC* generateCode(ASTREE *node) {
     
     return tacJoin(tacJoin(tacJoin(code[0],code[1]),code[2]),code[3]);
     
+                                        
+                                        
+}
+
+TAC* makeBinOp(int type, TAC* code0, TAC* code1) {
+    return tacJoin(tacJoin(code0,code1),tacCreate(type,makeTemp(),code0?code0->res:0,code1?code1->res:0));
+
+}
+
+TAC* makeIfThen(TAC* code0, TAC* code1) {
+    TAC* newif;
+    TAC* newlabel;
+    HASH_NODE* newlabel;
+    
+    newlabel = makeLabel();
+    newif = tacCreate(TAC_IFZ,newlabel,code[0]?code[0]->res:0,0);
 }
