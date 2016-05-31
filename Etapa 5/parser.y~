@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "ast.h"
+#include "tac.h"
 #include "semantic.h"
 
 FILE *out = NULL;
@@ -88,7 +89,7 @@ FILE *out = NULL;
 
 %%
 
-init: program																{ $$ = $1;TAC* tac; /*astreePrint($$,0);*/ tac = tacReverse(generateCode($1)); tacPrintListNext(tac); checkDeclaration($$); checkUsage($$); code_generate(out,$$);}
+init: program																{ $$ = $1;TAC* tac; /*astreePrint($$,0);*/ tac = tacReverse(generateCode($1)); tacPrintListNext(tac); checkDeclaration($$); checkUsage($$); /*code_generate(out,$$);*/}
 	;
 
 program: 

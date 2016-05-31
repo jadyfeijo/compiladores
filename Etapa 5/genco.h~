@@ -6,8 +6,8 @@
 //
 //
 
-//#ifndef genco_h
-//#define genco_h
+#ifndef genco_h
+#define genco_h
 
 #include <stdio.h>
 #include "ast.h"
@@ -16,4 +16,4 @@
 TAC* generateCode(ASTREE* node);
 TAC* makeBinOp(int type, TAC* code0, TAC* code1);
 
-//#endif /* genco_h */
+#endif /* genco_h */

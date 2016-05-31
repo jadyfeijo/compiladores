@@ -21,13 +21,14 @@ TAC* generateCode(ASTREE *node) {
     }
     
     switch (node->type) {
+		//case ASTREE_FUNDEC_PAR: return tacJoin(code[0], tacCreate(TAC_MOVE, 
         case ASTREE_SYMBOL: return tacCreate(TAC_SYMBOL,node->symbol,0,0); break;
         case ASTREE_ADD: return makeBinOp(TAC_ADD, code[0], code[1]); break;
 		case ASTREE_SUB: return makeBinOp(TAC_SUB, code[0], code[1]); break;
 		case ASTREE_MUL: return makeBinOp(TAC_MUL, code[0], code[1]); break;
 		case ASTREE_DIV: return makeBinOp(TAC_DIV, code[0], code[1]); break;
-		case ASTREE_ASS: return tacJoin(code[0], tacCreate(TAC_ASS,node->symbol,code[0]?code[0]->res:0,0)); break;
-		case ASTREE_IF: return makeIfThen(code[0], code[1]); break;
+		case ASTREE_ASS: return tacJoin(code[1], tacCreate(TAC_ASS,node->son[0]->symbol,code[1]?code[1]->res:0,0)); break;
+		//case ASTREE_IF: return makeIfThen(code[0], code[1]); break;
         default: break;
     }
     
@@ -41,11 +42,11 @@ TAC* makeBinOp(int type, TAC* code0, TAC* code1) {
 
 }
 
-TAC* makeIfThen(TAC* code0, TAC* code1) {
+/*TAC* makeIfThen(TAC* code0, TAC* code1) {
     TAC* newif;
-    TAC* newlabel;
+	TAC* label;
     HASH_NODE* newlabel;
     
     newlabel = makeLabel();
-    newif = tacCreate(TAC_IFZ,newlabel,code[0]?code[0]->res:0,0);
-}
+    newif = tacCreate(TAC_IFZ,label,code[0]?code[0]->res:0,0);
+}*/

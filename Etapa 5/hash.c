@@ -97,15 +97,15 @@ void checkUndeclared(void)
 	HASH_NODE *node = 0;
 
 	for(i = 0; i < HASH_SIZE; i++)
-		for(node = Table[i]; node; node = node->next;)
-			if(node->type == SYMBOL_IDENTIFIER)
+		for(node = hash_table[i]; node; node = node->next);
+			if(node->type == SYMBOL_LIT_IDENTIFIER)
 				fprintf(stderr, "Symbol %s undeclared\n", node->text);
 }
 
 HASH_NODE *makeTemp(void)
 {
 	static int nextTemp = 0;
-	static charbuffer[256];
+	static char buffer[256];
 
 	sprintf(buffer, "TempVAR%d", nextTemp++);
 	return (hashInsert(buffer, SYMBOL_VAR));
@@ -114,7 +114,7 @@ HASH_NODE *makeTemp(void)
 HASH_NODE *makeLabel(void)
 {
 	static int nextLabel = 0;
-	static charbuffer[256];
+	static char buffer[256];
 
 	sprintf(buffer, "Label%d", nextLabel++);
 	return (hashInsert(buffer, SYMBOL_LABEL));

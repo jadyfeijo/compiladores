@@ -11,6 +11,7 @@ TAC* tacCreate(int type, HASH_NODE* res, HASH_NODE* op1, HASH_NODE* op2)
 	newtac->op2 = op2;
 	newtac->prev = 0;
 	newtac->next = 0;
+	return newtac;
 }
 
 TAC* tacJoin(TAC* tac1, TAC* tac2)
@@ -24,7 +25,7 @@ TAC* tacJoin(TAC* tac1, TAC* tac2)
 	if(!tac2) 
 		return tac1;
 	
-	for(aux = tac2; temp->prev; temp = temp->prev);
+	for(aux = tac2; aux->prev; aux = aux->prev);
 	aux->prev = tac1;
 	
 	return tac2;
@@ -63,7 +64,7 @@ void tacPrintSingle(TAC* tac)
 	if(!tac)
 		return;
 		
-	fprinf(stderr, "TAC(");
+	fprintf(stderr, "TAC(");
 	switch(tac->type)
 	{
 		case TAC_SYMBOL: 
@@ -130,7 +131,7 @@ void tacPrintSingle(TAC* tac)
 			fprintf(stderr, "TAC_BEGINFUN");
 			break;
 			
-		case TAC_BEGINFUN: 
+		case TAC_ENDFUN: 
 			fprintf(stderr, "TAC_ENDFUN");
 			break;
 
