@@ -64,7 +64,7 @@ void tacPrintSingle(TAC* tac)
 	if(!tac)
 		return;
 		
-	fprinf(stderr, "TAC(");
+	fprintf(stderr, "TAC(");
 	switch(tac->type)
 	{
 		case TAC_SYMBOL: 
