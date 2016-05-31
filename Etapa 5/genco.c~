@@ -31,7 +31,8 @@ TAC* generateCode(ASTREE *node) {
     }
     
     return tacJoin(tacJoin(tacJoin(code[0],code[1]),code[2]),code[3]);
-                                
+    
+                                        
                                         
 }
 
