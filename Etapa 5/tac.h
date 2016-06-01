@@ -30,9 +30,11 @@
 #define TAC_VECDEC_INIT 28
 #define TAC_ASS_VEC 29
 #define TAC_FUNCALL 30
-#define TAC_FUNCALL_PARAM 31
-#define TAC_FUNDEC_PARAM 32
-#define TAC_OUTPUT 33
+#define TAC_FUNDEC_PARAM 31
+#define TAC_OUTPUT 32
+#define TAC_PUSHSTACK 33
+#define TAC_POPSTACK 34
+
 typedef struct tac_node
 {
 	int type;

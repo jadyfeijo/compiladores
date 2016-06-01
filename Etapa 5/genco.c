@@ -51,19 +51,7 @@ TAC* generateCode(ASTREE *node) {
         case ASTREE_LESS: return makeBinOp(TAC_LESS, code[0], code[1]); break;
 		case ASTREE_IF: return makeIfThen(code[0], code[1]); break;
          //
-        case ASTREE_FUNCALL: label = makeLabel();  return tacJoin(
-															code[1],
-															tacJoin(
-																tacJoin(
-																	tacCreate(TAC_FUNCALL,node->son[0]->symbol,label,0),
-																	tacJoin(
-																		tacCreate(TAC_JUMP,node->son[0]->symbol,0,0),
-																		tacCreate(TAC_LABEL,label,0,0)
-																			)
-																		),
-																tacCreate(TAC_FUNCALL,makeTemp(),0,0)
-																	)
-																); // */
+        case ASTREE_FUNCALL: label = makeLabel();  return tacJoin(code[1],tacJoin(tacJoin(tacCreate(TAC_FUNCALL,node->son[0]->symbol,label,0),tacJoin(tacCreate(TAC_JUMP,node->son[0]->symbol,0,0),tacCreate(TAC_LABEL,label,0,0))),tacCreate(TAC_PUSHSTACK,makeTemp(),0,0))); // */
 
 															/* return tacJoin(
 															code[1],
@@ -80,7 +68,7 @@ TAC* generateCode(ASTREE *node) {
 																//); */
 															 break;
 
-        case ASTREE_CALL_PAR: return tacJoin(tacJoin(code[0],tacCreate(TAC_FUNCALL_PARAM,code[0]->res,0,0)),code[1]); break;
+        case ASTREE_CALL_PAR: return tacJoin(tacJoin(code[0],tacCreate(TAC_POPSTACK,code[0]->res,0,0)),code[1]); break;
         case ASTREE_CALL_PAR2: return code[0]; break;
         case ASTREE_PAR: return tacJoin(tacCreate(TAC_FUNDEC_PARAM,node->son[1]->symbol,0,0),code[2]); break;
         case ASTREE_PAR2: return code[0]; break;
