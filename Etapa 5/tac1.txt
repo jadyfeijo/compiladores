@@ -6,15 +6,14 @@ int incn(int e) {
 };
 int main()
 {
-	a = a + b
+	a = a + b + 1
 	b = a * b
 	c[1] = a == b
 
 	if(c[1])
 		return a
-
-	return b
+	
 	a = incn(b)
 	output a,b,a
-
+	return b
 };
