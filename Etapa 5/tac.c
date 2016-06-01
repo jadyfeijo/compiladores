@@ -29,7 +29,7 @@ TAC* tacJoin(TAC* tac1, TAC* tac2)
 	aux->prev = tac1;
 	
 	return tac2;
-}
+}//eoqqq
 
 void tacPrintListPrev(TAC* tac)
 {
@@ -173,18 +173,18 @@ void tacPrintSingle(TAC* tac)
 	
 	if(tac->res)
 		fprintf(stderr, ",%s", tac->res->text);
-//	else
-//		fprintf(stderr, ",_");
+	else
+		fprintf(stderr, ",_");
 		
 	if(tac->op1)
         fprintf(stderr, ",%s", tac->op1->text);
-//	else
-//		fprintf(stderr, ",_");
+	else
+		fprintf(stderr, ",_");
 		
 	if(tac->op2)
-		fprintf(stderr, ",%s", tac->op2->text);
-//	else
-		fprintf(stderr, ")\n");
+		fprintf(stderr, ",%s)\n", tac->op2->text);
+	else
+		fprintf(stderr, ",_)\n");
     
 		
 }

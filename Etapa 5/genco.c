@@ -47,13 +47,7 @@ TAC* generateCode(ASTREE *node) {
         case ASTREE_OR: return makeBinOp(TAC_OR, code[0], code[1]); break;
         case ASTREE_GREATER: return makeBinOp(TAC_GREATER, code[0], code[1]); break;
         case ASTREE_LESS: return makeBinOp(TAC_LESS, code[0], code[1]); break;
-        case ASTREE_IF
-        case ASTREE_IFTE
-        case ASTREE_WHILE
-        case 
-            
-        
-        //case ASTREE_IF: return makeIfThen(code[0], code[1]); break;
+		case ASTREE_IF: return makeIfThen(code[0], code[1]); break;
         default: break;
     }
     
@@ -67,11 +61,10 @@ TAC* makeBinOp(int type, TAC* code0, TAC* code1) {
 
 }
 
-/*TAC* makeIfThen(TAC* code0, TAC* code1) {
+TAC* makeIfThen(TAC* code0, TAC* code1) {
     TAC* newif;
-	TAC* label;
     HASH_NODE* newlabel;
-    
+
     newlabel = makeLabel();
-    newif = tacCreate(TAC_IFZ,label,code[0]?code[0]->res:0,0);
-}*/
+    return newif = tacCreate(TAC_IFZ,newlabel,code0?code0->res:0,0);
+}
