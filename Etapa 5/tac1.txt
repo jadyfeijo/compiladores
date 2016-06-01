@@ -1,16 +1,19 @@
 int a:0;
 int b:0;
 bool c[5];
-
+int incn(int e) {
+ return 2;
+};
 int main()
 {
 	a = a + b
 	b = a * b
-
 	c[1] = a == b
 
 	if(c[1])
 		return a
 
 	return b
+	a = incn(b);
+
 };

@@ -11,6 +11,7 @@
 TAC* generateCode(ASTREE *node) {
     int i;
     TAC* code[MAX_SONS];
+    HASH_NODE* label;
     if(!node) return 0;
     
     for (i=0; i<MAX_SONS; i++) {
@@ -35,6 +36,7 @@ TAC* generateCode(ASTREE *node) {
         case ASTREE_RETURN: return tacJoin(code[0],tacCreate(TAC_RET,code[0]->res,0,0)); break;
         case ASTREE_OUTPUT: return code[0]; break;
         case ASTREE_SYMBOL: return tacCreate(TAC_SYMBOL,node->symbol,0,0); break;
+        case ASTREE_EXP: return code[0]; break;
         case ASTREE_ADD: return makeBinOp(TAC_ADD, code[0], code[1]); break;
         case ASTREE_SUB: return makeBinOp(TAC_SUB, code[0], code[1]); break;
         case ASTREE_MUL: return makeBinOp(TAC_MUL, code[0], code[1]); break;
@@ -48,6 +50,13 @@ TAC* generateCode(ASTREE *node) {
         case ASTREE_GREATER: return makeBinOp(TAC_GREATER, code[0], code[1]); break;
         case ASTREE_LESS: return makeBinOp(TAC_LESS, code[0], code[1]); break;
 		case ASTREE_IF: return makeIfThen(code[0], code[1]); break;
+         //
+        case ASTREE_FUNCALL: label = makeLabel(); return tacJoin(code[1],tacJoin(tacJoin(tacCreate(TAC_FUNCALL,node->son[0]->symbol,label,0),tacCreate(TAC_LABEL,label,0,0)),tacCreate(TAC_FUNCALL_PARAM,makeTemp(),0,0))); break;
+        case ASTREE_CALL_PAR: return tacJoin(tacJoin(code[0],tacCreate(TAC_FUNCALL_PARAM_NEXT,code[0]->res,0,0)),code[1]); break;
+        case ASTREE_CALL_PAR2: return code[0]; break;
+         // altas chances de dar merda no que ta entre comentarios, mesmo vale pro makeIfThen embaixo, fiz isso quase dormindo
+            
+         //
         default: break;
     }
     
@@ -61,10 +70,14 @@ TAC* makeBinOp(int type, TAC* code0, TAC* code1) {
 
 }
 
+//
 TAC* makeIfThen(TAC* code0, TAC* code1) {
     TAC* newif;
     HASH_NODE* newlabel;
+    HASH_NODE* newlabel2;
 
     newlabel = makeLabel();
-    return newif = tacCreate(TAC_IFZ,newlabel,code0?code0->res:0,0);
+    newlabel2 = makeLabel();
+    return newif = tacJoin(code0,tacJoin(tacJoin(tacCreate(TAC_IFZ,code0->res,newlabel,newlabel2),tacCreate(TAC_LABEL,newlabel,0,0)),tacJoin(code1,tacCreate(TAC_LABEL,newlabel2,0,0))));
 }
+//

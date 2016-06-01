@@ -29,7 +29,9 @@
 #define TAC_VECDEC 27
 #define TAC_VECDEC_INIT 28
 #define TAC_ASS_VEC 29
-
+#define TAC_FUNCALL 30
+#define TAC_FUNCALL_PARAM 31
+#define TAC_FUNCALL_PARAM_NEXT 32
 typedef struct tac_node
 {
 	int type;
