@@ -189,8 +189,8 @@ void tacPrintSingle(TAC* tac)
         case TAC_FUNCALL_PARAM:
             fprintf(stderr, "TAC_FUNCALL_PARAM");
             break;
-        case TAC_FUNCALL_PARAM_NEXT:
-            fprintf(stderr, "TAC_FUNCALL_PARAM_NEXT");
+        case TAC_FUNDEC_PARAM:
+            fprintf(stderr, "TAC_FUNDEC_PARAM");
             break;
         default:
 			fprintf(stderr, "TAC_DEFAULT");

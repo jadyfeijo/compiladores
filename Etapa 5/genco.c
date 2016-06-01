@@ -23,8 +23,8 @@ TAC* generateCode(ASTREE *node) {
     
     switch (node->type) {
         case ASTREE_DEC: return tacJoin(code[0],code[1]); break;
-        //case ASTREE_FUNDEC_PAR: tacJoin(tacCreate(TAC_BEGINFUN, node->son[1]->symbol,0,0 break;
-        case ASTREE_FUNDEC_VOID: break;
+        case ASTREE_FUNDEC_PAR: return tacJoin(tacCreate(TAC_BEGINFUN, node->son[1]->symbol,0,0),tacJoin(code[2],code[3])); break;
+        case ASTREE_FUNDEC_VOID: return tacJoin(tacCreate(TAC_BEGINFUN,node->son[1]->symbol,0,0),code[2]); break;
         case ASTREE_VARDEC: return tacJoin(tacCreate(TAC_VARDEC,node->son[1]->symbol,0,0),tacCreate(TAC_MOVE,node->son[1]->symbol,node->son[2]->symbol,0)); break;
         case ASTREE_VECDEC: return tacJoin(code[2],tacCreate(TAC_VECDEC,node->son[1]->symbol,code[2]->res,0)); break;
         case ASTREE_VECDEC_INIT: return tacJoin(code[2],tacJoin(tacCreate(TAC_VECDEC_INIT,node->son[1]->symbol,code[2]->res,0),code[3])); break;
@@ -51,9 +51,11 @@ TAC* generateCode(ASTREE *node) {
         case ASTREE_LESS: return makeBinOp(TAC_LESS, code[0], code[1]); break;
 		case ASTREE_IF: return makeIfThen(code[0], code[1]); break;
          //
-        case ASTREE_FUNCALL: label = makeLabel(); return tacJoin(code[1],tacJoin(tacJoin(tacCreate(TAC_FUNCALL,node->son[0]->symbol,label,0),tacCreate(TAC_LABEL,label,0,0)),tacCreate(TAC_FUNCALL_PARAM,makeTemp(),0,0))); break;
-        case ASTREE_CALL_PAR: return tacJoin(tacJoin(code[0],tacCreate(TAC_FUNCALL_PARAM_NEXT,code[0]->res,0,0)),code[1]); break;
+        case ASTREE_FUNCALL: label = makeLabel(); return tacJoin(code[1],tacJoin(tacJoin(tacCreate(TAC_FUNCALL,node->son[0]->symbol,label,0),tacCreate(TAC_LABEL,label,0,0)),tacCreate(TAC_FUNCALL,makeTemp(),0,0))); break;
+        case ASTREE_CALL_PAR: return tacJoin(tacJoin(code[0],tacCreate(TAC_FUNCALL_PARAM,code[0]->res,0,0)),code[1]); break;
         case ASTREE_CALL_PAR2: return code[0]; break;
+        case ASTREE_PAR: return tacJoin(tacCreate(TAC_FUNDEC_PARAM,node->son[1]->symbol,0,0),code[2]); break;
+        case ASTREE_PAR2: return code[0]; break;
          // altas chances de dar merda no que ta entre comentarios, mesmo vale pro makeIfThen embaixo, fiz isso quase dormindo
             
          //
