@@ -5,4 +5,7 @@ int main()
 {
 	a = a + b
 	b = a * b
+
+	if(a>b)
+		return a
 };
