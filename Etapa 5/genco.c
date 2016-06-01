@@ -50,6 +50,8 @@ TAC* generateCode(ASTREE *node) {
         case ASTREE_GREATER: return makeBinOp(TAC_GREATER, code[0], code[1]); break;
         case ASTREE_LESS: return makeBinOp(TAC_LESS, code[0], code[1]); break;
 		case ASTREE_IF: return makeIfThen(code[0], code[1]); break;
+        case ASTREE_IFTE: return makeIfThenElse(code[0], code[1], code[2]); break;
+
          //
         case ASTREE_FUNCALL: label = makeLabel();  return tacJoin(code[1],tacJoin(tacJoin(tacCreate(TAC_FUNCALL,node->son[0]->symbol,label,0),tacJoin(tacCreate(TAC_JUMP,node->son[0]->symbol,0,0),tacCreate(TAC_LABEL,label,0,0))),tacCreate(TAC_PUSHSTACK,makeTemp(),0,0))); // */
 
@@ -102,3 +104,13 @@ TAC* makeIfThen(TAC* code0, TAC* code1) {
     return newif = tacJoin(code0,tacJoin(tacJoin(tacCreate(TAC_IFZ,code0->res,newlabel,newlabel2),tacCreate(TAC_LABEL,newlabel,0,0)),tacJoin(code1,tacCreate(TAC_LABEL,newlabel2,0,0))));
 }
 //
+TAC* makeIfThenElse(TAC* code0, TAC* code1, TAC* code2) {
+    TAC* newif;
+    HASH_NODE* newlabel;
+    HASH_NODE* newlabel2;
+    
+    newlabel = makeLabel();
+    newlabel2 = makeLabel();
+    return newif = tacJoin(code0,tacJoin(tacJoin(tacCreate(TAC_IFZ,code0->res,newlabel,newlabel2),tacCreate(TAC_LABEL,newlabel,0,0)),tacJoin(code1,tacJoin(tacCreate(TAC_LABEL,newlabel2,0,0),code2))));
+}
+

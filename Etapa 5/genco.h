@@ -16,5 +16,6 @@
 TAC* generateCode(ASTREE* node);
 TAC* makeBinOp(int type, TAC* code0, TAC* code1);
 TAC* makeIfThen(TAC* code0, TAC* code1);
+TAC* makeIfThenElse(TAC* code0, TAC* code1, TAC* code2);
 
 //#endif /* genco_h */
