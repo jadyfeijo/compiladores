@@ -32,6 +32,7 @@
 #define TAC_FUNCALL 30
 #define TAC_FUNCALL_PARAM 31
 #define TAC_FUNDEC_PARAM 32
+#define TAC_OUTPUT 33
 typedef struct tac_node
 {
 	int type;

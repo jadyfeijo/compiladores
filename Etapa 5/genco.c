@@ -23,8 +23,8 @@ TAC* generateCode(ASTREE *node) {
     
     switch (node->type) {
         case ASTREE_DEC: return tacJoin(code[0],code[1]); break;
-        case ASTREE_FUNDEC_PAR: return tacJoin(tacCreate(TAC_BEGINFUN, node->son[1]->symbol,0,0),tacJoin(code[2],code[3])); break;
-        case ASTREE_FUNDEC_VOID: return tacJoin(tacCreate(TAC_BEGINFUN,node->son[1]->symbol,0,0),code[2]); break;
+        case ASTREE_FUNDEC_PAR: return tacJoin(tacCreate(TAC_BEGINFUN, node->son[1]->symbol,0,0),tacJoin(code[2],tacJoin(code[3],tacCreate(TAC_ENDFUN,node->son[1]->symbol,0,0)))); break;
+        case ASTREE_FUNDEC_VOID: return tacJoin(tacCreate(TAC_BEGINFUN,node->son[1]->symbol,0,0),tacJoin(code[2],tacCreate(TAC_ENDFUN,node->son[1]->symbol,0,0))); break;
         case ASTREE_VARDEC: return tacJoin(tacCreate(TAC_VARDEC,node->son[1]->symbol,0,0),tacCreate(TAC_MOVE,node->son[1]->symbol,node->son[2]->symbol,0)); break;
         case ASTREE_VECDEC: return tacJoin(code[2],tacCreate(TAC_VECDEC,node->son[1]->symbol,code[2]->res,0)); break;
         case ASTREE_VECDEC_INIT: return tacJoin(code[2],tacJoin(tacCreate(TAC_VECDEC_INIT,node->son[1]->symbol,code[2]->res,0),code[3])); break;
@@ -56,6 +56,9 @@ TAC* generateCode(ASTREE *node) {
         case ASTREE_CALL_PAR2: return code[0]; break;
         case ASTREE_PAR: return tacJoin(tacCreate(TAC_FUNDEC_PARAM,node->son[1]->symbol,0,0),code[2]); break;
         case ASTREE_PAR2: return code[0]; break;
+        case ASTREE_OUTLIST: return tacJoin(tacJoin(code[0],tacCreate(TAC_OUTPUT,code[0]->res,0,0)),code[1]);break;
+        case ASTREE_OUTLIST2: return code[0];
+        case ASTREE_ID: return tacCreate(TAC_SYMBOL,node->son[0]->symbol,0,0);
          // altas chances de dar merda no que ta entre comentarios, mesmo vale pro makeIfThen embaixo, fiz isso quase dormindo
             
          //
