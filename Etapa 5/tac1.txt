@@ -1,11 +1,16 @@
 int a:0;
 int b:0;
+bool c[5];
 
 int main()
 {
 	a = a + b
 	b = a * b
 
-	if(a>b)
+	c[1] = a == b
+
+	if(c[1])
 		return a
+
+	return b
 };

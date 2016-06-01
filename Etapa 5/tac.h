@@ -25,7 +25,10 @@
 #define TAC_PRINT 23
 #define TAC_READ 24
 #define TAC_ASS 25
-
+#define TAC_VARDEC 26
+#define TAC_VECDEC 27
+#define TAC_VECDEC_INIT 28
+#define TAC_ASS_VEC 29
 
 typedef struct tac_node
 {

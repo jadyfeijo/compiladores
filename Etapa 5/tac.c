@@ -166,6 +166,22 @@ void tacPrintSingle(TAC* tac)
 		case TAC_ASS: 
 			fprintf(stderr, "TAC_ASS");
 			break;
+
+		case TAC_VARDEC: 
+			fprintf(stderr, "TAC_VARDEC");
+			break;
+
+		case TAC_VECDEC: 
+			fprintf(stderr, "TAC_VECDEC");
+			break;
+
+		case TAC_VECDEC_INIT: 
+			fprintf(stderr, "TAC_VECDEC_INIT");
+			break;
+
+		case TAC_ASS_VEC: 
+			fprintf(stderr, "TAC_ASS_VEC");
+			break;
 			
 		default:
 			fprintf(stderr, "TAC_DEFAULT");

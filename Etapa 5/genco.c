@@ -22,7 +22,7 @@ TAC* generateCode(ASTREE *node) {
     
     switch (node->type) {
         case ASTREE_DEC: return tacJoin(code[0],code[1]); break;
-        case ASTREE_FUNDEC_PARAM: break;
+        //case ASTREE_FUNDEC_PAR: tacJoin(tacCreate(TAC_BEGINFUN, node->son[1]->symbol,0,0 break;
         case ASTREE_FUNDEC_VOID: break;
         case ASTREE_VARDEC: return tacJoin(tacCreate(TAC_VARDEC,node->son[1]->symbol,0,0),tacCreate(TAC_MOVE,node->son[1]->symbol,node->son[2]->symbol,0)); break;
         case ASTREE_VECDEC: return tacJoin(code[2],tacCreate(TAC_VECDEC,node->son[1]->symbol,code[2]->res,0)); break;
@@ -30,9 +30,9 @@ TAC* generateCode(ASTREE *node) {
         case ASTREE_BLOCK: return code[0]; break;
         case ASTREE_LCMD: return tacJoin(code[0],code[1]); break;
         case ASTREE_ASS: return tacJoin(code[1], tacCreate(TAC_ASS,node->son[0]->symbol,code[1]?code[1]->res:0,0)); break;
-        case ASTRE_ASS_VEC: return tacJoin(tacJoin(code[0],code[2]),tacCreate(TAC_VECMOVE,node->son[1]->symbol,code[2]->res,code[0]->res)); break;
-        case ASTREE_INPUT: return tacCreate(TAC_INPUT,node->son[0]->symbol,0,0); break;
-        case ASTREE_RETURN: return tacJoin(code[0],tacCreate(TAC_RETURN,code[0]->res,0,0)); break;
+        case ASTREE_ASS_VEC: return tacJoin(tacJoin(code[0],code[2]),tacCreate(TAC_ASS_VEC,node->son[1]->symbol,code[2]->res,code[0]->res)); break;
+        case ASTREE_INPUT: return tacCreate(TAC_PRINT,node->son[0]->symbol,0,0); break;
+        case ASTREE_RETURN: return tacJoin(code[0],tacCreate(TAC_RET,code[0]->res,0,0)); break;
         case ASTREE_OUTPUT: return code[0]; break;
         case ASTREE_SYMBOL: return tacCreate(TAC_SYMBOL,node->symbol,0,0); break;
         case ASTREE_ADD: return makeBinOp(TAC_ADD, code[0], code[1]); break;
