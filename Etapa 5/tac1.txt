@@ -7,8 +7,6 @@ int incn(int e) {
 int main()
 {
 	a = a + b
-	b = a * b
-	c[1] = a == b
 
 	if(c[1]) {
 		return a
@@ -19,8 +17,9 @@ int main()
 
 	a = incn(b)
 	output a,b,a
-	return b
+	
 	while (c[1]) {
-	 	a = incn(b)
+	 	a = 0
 	}
+	return b
 };
