@@ -195,10 +195,16 @@ void tacPrintSingle(TAC* tac)
         case TAC_FUNDEC_PARAM:
             fprintf(stderr, "TAC_FUNDEC_PARAM");
             break;
-        case TAC_OUTPUT:
-            fprintf(stderr, "TAC_OUTPUT");
+        
+
+	case TAC_VEC_INDEX:
+            fprintf(stderr, "TAC_VEC_INDEX");
             break;
             
+	case TAC_ASS_VEC_INDEX:
+            fprintf(stderr, "TAC_ASS_VEC_INDEX");
+            break;	
+
         default:
 			fprintf(stderr, "TAC_DEFAULT");
 	}
