@@ -14,12 +14,16 @@ Ltmp1:
 Ltmp2:
 	.cfi_def_cfa_register %rbp
 	xorl	%eax, %eax
-	movl	_a(%rip), %ecx
+	movsbl	_a(%rip), %ecx
+	movsbl	_b(%rip), %edx
 	movl	%eax, -4(%rbp)          ## 4-byte Spill
 	movl	%ecx, %eax
+	movl	%edx, -8(%rbp)          ## 4-byte Spill
 	cltd
-	idivl	_b(%rip)
-	movl	%eax, _c(%rip)
+	movl	-8(%rbp), %ecx          ## 4-byte Reload
+	idivl	%ecx
+	movb	%al, %sil
+	movb	%sil, _c(%rip)
 	movl	-4(%rbp), %eax          ## 4-byte Reload
 	popq	%rbp
 	retq
@@ -27,16 +31,16 @@ Ltmp2:
 
 	.section	__DATA,__data
 	.globl	_b                      ## @b
-	.align	2
 _b:
-	.long	5                       ## 0x5
+	.byte	53                      ## 0x35
 
 	.globl	_a                      ## @a
-	.align	2
 _a:
-	.long	6                       ## 0x6
+	.byte	54                      ## 0x36
 
 	.globl	_c                      ## @c
-.zerofill __DATA,__common,_c,4,2
+_c:
+	.byte	48                      ## 0x30
+
 
 .subsections_via_symbols
