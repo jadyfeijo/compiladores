@@ -4,6 +4,16 @@
 #include <stdlib.h>
 
 int first = 0;
+int firstPrint = 0;
+
+//counters for lables
+
+int intc = 0;
+int charc = 0;
+int labc = 0;
+int func = 0;
+int ltmpc = 0;
+int bbc = 0;
 
 void asmGenerate(char* filename, TAC* tac)
 {
@@ -18,7 +28,7 @@ void asmGenerate(char* filename, TAC* tac)
 
 	if(!first)	
 	{
-		fprintf(file, "\t.section\t__TEXT,__text,regular,pure_instructions\n\t.macosx_version_min 10, 11\n");
+		fprintf(file, "\t.section\t__TEXT,__text,regular,pure_instructions\n\t.macosx_version_min 10, 11\n\n");
 		first = 1;
 	}
 
@@ -39,11 +49,14 @@ void asmGenerate(char* filename, TAC* tac)
 			case TAC_MOVE: // 3
 				if(tac->res->dataType == DATATYPE_INT)
 				{
-					fprintf(out, "movl	$%s, -4(%rbp)", tac->res->text);
+					intc++;
+					fprintf(file, "movl	$%s, -%d(%rbp)\n", tac->res->text, (4*intc)+charc);
+					
 				}
 				if(tac->res->dataType == DATATYPE_CHAR)
 				{
-						fprintf(out, "movb	$%s, -1(%rbp)", tac->res->text);
+						charc++;
+						fprintf(file, "movb	$%s, -%d(%rbp)\n", tac->res->text, (4*intc)+charc);
 				}
 				break;
 			
@@ -96,11 +109,32 @@ void asmGenerate(char* filename, TAC* tac)
 				break;
 
 			case TAC_BEGINFUN: // 16
-				//fprintf(stderr, "TAC_BEGINFUN");
+				bbc = 0;
+				fprintf(file, "\n\t.globl\t_%s\n", tac->res->text);
+				fprintf(file, "\t.align\t4, 0x90\n");
+				fprintf(file, "_%s:\n", tac->res->text);       // \t\t\t\t\t\t\t\t## @_%s                           
+				fprintf(file, "\t.cfi_startproc\n");
+				fprintf(file, "## BB#%d:\n", bbc);
+				fprintf(file, "\tpushq\t%rbp\n");
+				fprintf(file, "Ltmp%d:\n", ltmpc);
+				fprintf(file, "\t.cfi_def_cfa_offset 16\n");
+				fprintf(file, "Ltmp%d:\n", ltmpc+1);
+				fprintf(file, "\t.cfi_offset %rbp, -16\n");
+				fprintf(file, "\tmovq\t%rsp, %rbp\n");
+				fprintf(file, "Ltmp%d:\n", ltmpc+2);
+				fprintf(file, "\t.cfi_def_cfa_register %rbp\n");
+				fprintf(file, "\txorl\t%%eax, %%eax\n");
+				//fprintf(file, "\tpopq\t%rbp\n");
+				//fprintf(file, "\tretq\n");
+				ltmpc = ltmpc + 3;
+				bbc++;
 				break;
 			
 			case TAC_ENDFUN: // 17
 				//fprintf(stderr, "TAC_ENDFUN");
+				fprintf(file, "\tpopq\t%rbp\n");
+				fprintf(file, "\tretq\n");
+				fprintf(file, "\t.cfi_endproc\n");
 				break;
 
 			case TAC_IFZ: // 18
@@ -121,6 +155,17 @@ void asmGenerate(char* filename, TAC* tac)
 			
 			case TAC_RET: // 22
 				//fprintf(stderr, "TAC_RET");
+				if(tac->res->dataType == DATATYPE_INT) // aparentemente o return nada mais eh do qum move para o rbp, e a funcao poppa ele pra q, que entao realiza retq
+				{
+					intc++;
+					fprintf(file, "\tmovl	$%s, -%d(%rbp)\n", tac->res->text, (4*intc)+charc);
+					
+				}
+				if(tac->res->dataType == DATATYPE_CHAR)
+				{
+						charc++;
+						fprintf(file, "\tmovb	$%s, -%d(%rbp)\n", tac->res->text, (4*intc)+charc);
+				}
 				break;	
 			
 			case TAC_PRINT: // 23
