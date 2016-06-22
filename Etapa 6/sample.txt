@@ -1,12 +1,12 @@
 // UFRGS - Compiladores - Marcelo Johann - 2016/1
 
-/*int a:0;
-int i:0;
-real v[10]: 0 0 0 0 0 0 0 0 0 0; 
-bool mat[1000];
+int a:0;
+//int i:0;
+//real v[10]: 0 0 0 0 0 0 0 0 0 0; 
+//bool mat[1000];
 char c:0;
 
-int main()
+/*int main()
   {
   output "Digite um numero: "
   input i
@@ -17,11 +17,11 @@ int main()
     }
   output "Incrementado algumas vezes fica ",a,"\n"
   if (a==5) output "Parou no meio\n"
-  };*/
+  };
 
 int incn (int x, int n)
   {
   return 3
-  };
+  };*/
 
 int voidfunc() ; ;
