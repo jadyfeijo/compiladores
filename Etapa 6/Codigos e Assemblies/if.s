@@ -14,8 +14,7 @@ Ltmp1:
 Ltmp2:
 	.cfi_def_cfa_register %rbp
 	movl	$0, -4(%rbp)
-	movl	$0, -8(%rbp)
-	cmpl	$0, -8(%rbp)
+	cmpl	$0, _a(%rip)
 	je	LBB0_2
 ## BB#1:
 	jmp	LBB0_2
@@ -25,5 +24,7 @@ LBB0_2:
 	retq
 	.cfi_endproc
 
+	.globl	_a                      ## @a
+.zerofill __DATA,__common,_a,4,2
 
 .subsections_via_symbols

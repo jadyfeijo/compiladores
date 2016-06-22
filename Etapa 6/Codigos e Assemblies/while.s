@@ -14,9 +14,8 @@ Ltmp1:
 Ltmp2:
 	.cfi_def_cfa_register %rbp
 	movl	$0, -4(%rbp)
-	movl	$10, -8(%rbp)
 LBB0_1:                                 ## =>This Inner Loop Header: Depth=1
-	cmpl	$0, -8(%rbp)
+	cmpl	$0, _a(%rip)
 	je	LBB0_3
 ## BB#2:                                ##   in Loop: Header=BB0_1 Depth=1
 	jmp	LBB0_1
@@ -25,6 +24,12 @@ LBB0_3:
 	popq	%rbp
 	retq
 	.cfi_endproc
+
+	.section	__DATA,__data
+	.globl	_a                      ## @a
+	.align	2
+_a:
+	.long	10                      ## 0xa
 
 
 .subsections_via_symbols
