@@ -60,8 +60,8 @@ TAC* generateCode(ASTREE *node) {
         case ASTREE_PAR: return tacJoin(tacCreate(TAC_FUNDEC_PARAM,node->son[1]->symbol,0,0),code[2]); break;
         case ASTREE_PAR2: return code[0]; break;
         case ASTREE_OUTLIST: return tacJoin(tacJoin(code[0],tacCreate(TAC_PRINT,code[0]->res,0,0)),code[1]);break;
-        case ASTREE_OUTLIST2: return code[0];
-        case ASTREE_ID: return tacCreate(TAC_SYMBOL,node->son[0]->symbol,0,0);
+        case ASTREE_OUTLIST2: return code[0]; break;
+        case ASTREE_ID: return tacCreate(TAC_SYMBOL,node->son[0]->symbol,0,0); break;
 		case ASTREE_VEC: return tacJoin(code[1],tacCreate(TAC_VEC_INDEX,makeTemp(),node->son[0]->symbol,code[1]->res)); break;
         default: break;
     }

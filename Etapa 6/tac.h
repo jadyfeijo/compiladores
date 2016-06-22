@@ -31,11 +31,8 @@
 #define TAC_ASS_VEC 29
 #define TAC_FUNCALL 30
 #define TAC_FUNDEC_PARAM 31
-#define TAC_OUTPUT 32
-#define TAC_PUSHSTACK 33
-#define TAC_POPSTACK 34
-#define TAC_VEC_INDEX 35
-#define TAC_ASS_VEC_INDEX 36
+#define TAC_VEC_INDEX 32
+#define TAC_ASS_VEC_INDEX 33
 
 typedef struct tac_node
 {
