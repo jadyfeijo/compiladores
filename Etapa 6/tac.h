@@ -36,6 +36,7 @@
 #define TAC_FUNDEC_PARAM 31
 #define TAC_VEC_INDEX 32
 #define TAC_ASS_VEC_INDEX 33
+#define TAC_DEFAULT 666
 
 typedef struct tac_node
 {

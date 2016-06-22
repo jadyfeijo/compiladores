@@ -25,7 +25,7 @@ TAC* generateCode(ASTREE *node) {
         case ASTREE_DEC: return tacJoin(code[0],code[1]); break;
         case ASTREE_FUNDEC_PAR: return tacJoin(tacCreate(TAC_BEGINFUN, node->son[1]->symbol,0,0),tacJoin(code[2],tacJoin(code[3],tacCreate(TAC_ENDFUN,node->son[1]->symbol,0,0)))); break;
         case ASTREE_FUNDEC_VOID: return tacJoin(tacCreate(TAC_BEGINFUN,node->son[1]->symbol,0,0),tacJoin(code[2],tacCreate(TAC_ENDFUN,node->son[1]->symbol,0,0))); break;
-        case ASTREE_VARDEC: return tacJoin(tacCreate(TAC_VARDEC,node->son[1]->symbol,0,0),tacCreate(TAC_MOVE,node->son[1]->symbol,node->son[2]->symbol,0)); break;
+        case ASTREE_VARDEC: return tacJoin(tacCreate(TAC_VARDEC,node->son[1]->symbol,0,0),tacCreate(TAC_DEFAULT,node->son[1]->symbol,node->son[2]->symbol,0)); break;
         case ASTREE_VECDEC: return tacJoin(code[2],tacCreate(TAC_VECDEC,node->son[1]->symbol,code[2]->res,0)); break;
         case ASTREE_VECDEC_INIT: return tacJoin(code[2],tacJoin(tacCreate(TAC_VECDEC_INIT,node->son[1]->symbol,code[2]->res,0),code[3])); break;
         case ASTREE_BLOCK: return code[0]; break;

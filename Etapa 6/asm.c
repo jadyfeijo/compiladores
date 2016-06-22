@@ -5,6 +5,7 @@
 
 int first = 0;
 int firstPrint = 0;
+int firstVar = 0;
 
 //counters for lables
 
@@ -28,7 +29,7 @@ void asmGenerate(char* filename, TAC* tac)
 
 	if(!first)	
 	{
-		fprintf(file, "\t.section\t__TEXT,__text,regular,pure_instructions\n\t.macosx_version_min 10, 11\n\n");
+		fprintf(file, "\t.section\t__TEXT,__text,regular,pure_instructions\n\t.macosx_version_min 10, 11\n");
 		first = 1;
 	}
 
@@ -47,6 +48,7 @@ void asmGenerate(char* filename, TAC* tac)
 				break;	
 			
 			case TAC_MOVE: // 3
+				
 				if(tac->res->dataType == DATATYPE_INT)
 				{
 					intc++;
@@ -182,6 +184,15 @@ void asmGenerate(char* filename, TAC* tac)
 
 			case TAC_VARDEC: // 26
 				//fprintf(stderr, "TAC_VARDEC");
+				if(!firstVar)
+				{
+					fprintf(file, "\n\n\t.section\t__DATA,__data");
+					firstVar = 1;
+				}
+				if(tac->res->dataType == DATATYPE_INT)
+					fprintf(file, "\n\t.globl\t_%s\n\t.align\t2\n_%s:\n\t.long\t%s\n", tac->res->text, tac->res->text, tac->next->op1->text);
+				if(tac->res->dataType == DATATYPE_CHAR)
+					fprintf(file, "\n\t.globl\t_%s\n\t.align\t2\n_%s:\n\t.byte\t%s\n", tac->res->text, tac->res->text, tac->next->op1->text);
 				break;
 
 			case TAC_VECDEC: // 27
