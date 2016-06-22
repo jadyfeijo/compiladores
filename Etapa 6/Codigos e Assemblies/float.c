@@ -1,4 +1,4 @@
 int main ()
 {
-    float s;
+    float s=2;
 }

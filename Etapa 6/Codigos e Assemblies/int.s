@@ -14,6 +14,7 @@ Ltmp1:
 Ltmp2:
 	.cfi_def_cfa_register %rbp
 	xorl	%eax, %eax
+	movl	$3, -4(%rbp)
 	popq	%rbp
 	retq
 	.cfi_endproc

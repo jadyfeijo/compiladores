@@ -1,4 +1,4 @@
 int main ()
 {
-    char c;
+    char c='a';
 }
