@@ -4,6 +4,7 @@
 #include "ast.h"
 #include "semantic.h"
 #include "genco.h"
+#include "asm.h"
 
 FILE *out = NULL;
 
@@ -89,7 +90,7 @@ FILE *out = NULL;
 
 %%
 
-init: program																{ $$ = $1;TAC* tac; /*astreePrint($$,0);*/ checkDeclaration($$); checkUsage($$); tac = tacReverse(generateCode($1)); tacPrintListNext(tac);  /*code_generate(out,$$);*/}
+init: program																{ $$ = $1;TAC* tac; /*astreePrint($$,0);*/ checkDeclaration($$); checkUsage($$); tac = tacReverse(generateCode($1)); /*tacPrintListNext(tac);*/ asmGenerate("asm.s", tac);  /*code_generate(out,$$);*/}
 	;
 
 program: 
