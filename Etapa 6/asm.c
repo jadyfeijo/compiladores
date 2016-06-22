@@ -61,7 +61,17 @@ void asmGenerate(char* filename, TAC* tac)
 				break;
 			
 			case TAC_ADD: // 4
-				//fprintf(stderr, "TAC_ADD");
+                if(tac->res->dataType == DATATYPE_INT)
+                {
+                    intc++;
+                    fprintf(file, "movl	$%s, -%d(%rbp)\n", tac->res->text, (4*intc)+charc);
+                    
+                }
+                if(tac->res->dataType == DATATYPE_CHAR)
+                {
+                    charc++;
+                    fprintf(file, "movb	$%s, -%d(%rbp)\n", tac->res->text, (4*intc)+charc);
+                }
 				break;
 			
 			case TAC_SUB: // 5
