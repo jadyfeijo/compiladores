@@ -1,3 +1,6 @@
+#ifndef TAC_H
+#define TAC_H
+
 #include "hash.h"
 
 #define TAC_SYMBOL 1
@@ -50,3 +53,4 @@ void tacPrintListPrev(TAC* tac);
 TAC* tacJoin(TAC* tac1, TAC* tac2);
 TAC* tacReverse(TAC* tac);
 void tacPrintListNext(TAC* tac);
+#endif

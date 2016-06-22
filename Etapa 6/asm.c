@@ -13,15 +13,12 @@ void asmGenerate(char* filename, TAC* tac)
 	if(!filename)
 		return;
 		
-	if(!file = fopen(filename, "w"))
-		exit(5) // output file error
+	if(!(file = fopen(filename, "w")))
+		exit(5); // output file error
 
-	if(!first)
+	if(!first)	
 	{
-		fprintf(file, "\t.section\t__TEXT,__text,regular,pure_instructions
-						\n.macosx_version_min 10, 11
-						\n.globl	_main
-						\n.align	4, 0x90");
+		fprintf(file, "\t.section\t__TEXT,__text,regular,pure_instructions\n\t.macosx_version_min 10, 11\n\t.globl	_main\n\t.align	4, 0x90");
 		first = 1;
 	}
 
@@ -164,8 +161,9 @@ void asmGenerate(char* filename, TAC* tac)
 		        //fprintf(stderr, "TAC_ASS_VEC_INDEX");
 		        break;	
 
-		    default:
+		    default: break;
 				//fprintf(stderr, "TAC_DEFAULT");			
 		}
+	}
 }
 

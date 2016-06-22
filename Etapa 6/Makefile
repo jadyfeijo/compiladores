@@ -1,7 +1,7 @@
-all:	etapa5
+all:	etapa6
 
-etapa5: lex.yy.o main.o hash.o y.tab.o ast.o semantic.o tac.o genco.o 
-	gcc -o etapa5 lex.yy.o main.o hash.o y.tab.o ast.o semantic.o tac.o genco.o
+etapa6: lex.yy.o main.o hash.o y.tab.o ast.o semantic.o tac.o genco.o asm.o
+	gcc -o etapa6 lex.yy.o main.o hash.o y.tab.o ast.o semantic.o tac.o genco.o asm.o
 
 main.o: main.c lex.yy.c
 	gcc -c main.c
@@ -33,5 +33,8 @@ tac.o: tac.c
 genco.o: genco.c
 	gcc -c genco.c
 
+asm.o: asm.c
+	gcc -c asm.c
+
 clean:
-	rm -f lex.yy.c lex.yy.h y.tab.c y.tab.h *.o etapa5
+	rm -f lex.yy.c lex.yy.h y.tab.c y.tab.h *.o etapa6

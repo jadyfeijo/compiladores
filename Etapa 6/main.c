@@ -7,9 +7,9 @@
 
 int main(int argc, char ** argv)
 {
-	if(argc!=3)
+	if(argc!=2)
 	{
-		printf("\nUsage: etapa4 <arquivo> <arquivo2> \n");
+		printf("\nUsage: etapa6 <arquivo> \n");
 		exit(1);
 	}
 	
@@ -24,10 +24,10 @@ int main(int argc, char ** argv)
 	
 	yyin = file;
     
-    if(!(file=fopen(argv[2], "w"))){
+    /*if(!(file=fopen(argv[2], "w"))){
         printf("Erro ao abrir arquivo de saida: %s !\n", argv[2]);
     }
-    out_file(file);
+    out_file(file);*/
     initMe();
 
     yyparse();
