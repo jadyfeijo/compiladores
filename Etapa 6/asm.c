@@ -18,7 +18,7 @@ void asmGenerate(char* filename, TAC* tac)
 
 	if(!first)	
 	{
-		fprintf(file, "\t.section\t__TEXT,__text,regular,pure_instructions\n\t.macosx_version_min 10, 11\n\t.globl	_main\n\t.align	4, 0x90");
+		fprintf(file, "\t.section\t__TEXT,__text,regular,pure_instructions\n\t.macosx_version_min 10, 11\n");
 		first = 1;
 	}
 
@@ -30,7 +30,6 @@ void asmGenerate(char* filename, TAC* tac)
 		{
 
 			case TAC_SYMBOL: // 1
-				//fprintf(stderr, "TAC_SYMBOL");
 				break;
 			
 			case TAC_LABEL: // 2
@@ -38,7 +37,14 @@ void asmGenerate(char* filename, TAC* tac)
 				break;	
 			
 			case TAC_MOVE: // 3
-				//fprintf(stderr, "TAC_MOVE");
+				if(tac->res->dataType == DATATYPE_INT)
+				{
+					fprintf(out, "movl	$%s, -4(%rbp)", tac->res->text);
+				}
+				if(tac->res->dataType == DATATYPE_CHAR)
+				{
+						fprintf(out, "movb	$%s, -1(%rbp)", tac->res->text);
+				}
 				break;
 			
 			case TAC_ADD: // 4
