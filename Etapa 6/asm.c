@@ -474,7 +474,17 @@ void asmGenerate(char* filename, TAC* tac)
 					case 2:
 					break;
 					case 3:
-						fprintf(file, "\t.section	__TEXT,__cstring,cstring_literals\n");
+						if(!firstPrint)
+						{
+							fprintf(file, "\t.section	__TEXT,__cstring,cstring_literals\n");
+							firstPrint++;
+							fprintf(file, "L_.str:                                 ## @.str\n\t.asciz	"%s"",tac->res->text);
+						}
+						else
+						{
+							fprintf(file, "L_.str%d:                                 ## @.str\n\t.asciz	"%s"",firstPrint, tac->res->text);
+							firstPrint++;
+						}
 						//fazer laco pra printar os L_.str firstPrint vezes
 					break;
 				}
