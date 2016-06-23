@@ -472,8 +472,10 @@ void asmGenerate(char* filename, TAC* tac)
 						if(tac->op1->type == 301)
 							fprintf(file, "\tmovl\t$%s, _%s(%%rip)\n", tac->op1->text, tac->res->text); 
 						if(tac->op1->type == 307)
+						{
 							fprintf(file, "\tmovl\t_%s(%%rip), %%ecx\n", tac->op1->text);
 							fprintf(file, "\tmovl\t%%ecx, _%s(%%rip)\n", tac->res->text);
+						}
 						break;
 				}
 				
