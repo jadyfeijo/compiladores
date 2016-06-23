@@ -153,8 +153,11 @@ TAC* makeIfThenElse(TAC* code0, TAC* code1, TAC* code2) {
     newlabel3 = makeLabel();
     
    // return newifelse = tacJoin(code0,tacJoin(tacCreate(TAC_IFZ,newlabel,code0->res,0),tacJoin(code1,tacJoin(tacCreate(TAC_LABEL,newlabel,0,0),code2))));
+   // code0 (ifz (code1 (jump2 (label (code2 label2))))))
+
+   //    return newifelse = tacJoin(code0,tacJoin(tacJoin(tacCreate(TAC_IFZ,code0->res,newlabel,newlabel2),tacCreate(TAC_LABEL,newlabel,0,0)),tacJoin(tacJoin(code1,tacCreate(TAC_JUMP,newlabel3,0,0)),tacJoin(tacCreate(TAC_LABEL,newlabel2,0,0),tacJoin(code2,tacCreate(TAC_LABEL,newlabel3,0,0))))));
     
-   return newifelse = tacJoin(code0,tacJoin(tacJoin(tacCreate(TAC_IFZ,code0->res,newlabel,newlabel2),tacCreate(TAC_LABEL,newlabel,0,0)),tacJoin(tacJoin(code1,tacCreate(TAC_JUMP,newlabel3,0,0)),tacJoin(tacCreate(TAC_LABEL,newlabel2,0,0),tacJoin(code2,tacCreate(TAC_LABEL,newlabel3,0,0))))));
+   return newifelse = tacJoin(code0, tacJoin(tacCreate(TAC_IFZ,code0->res,newlabel,0), tacJoin(code1,tacJoin(tacCreate(TAC_JUMP,newlabel2,0,0), tacJoin(tacCreate(TAC_LABEL,newlabel,0,0), tacJoin(code2,tacCreate(TAC_LABEL,newlabel2,0,0)))))));
 }
 
 TAC* makeWhile(TAC* code0,TAC* code1) {

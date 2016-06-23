@@ -4,8 +4,10 @@ int c:7;
 
 int main()
 {
-	while (a<10)
-    {
-    	a = b+c
-    }
+	if(a < 0)
+	{
+		a = b+c
+	}
+	else
+		return 0
 };
