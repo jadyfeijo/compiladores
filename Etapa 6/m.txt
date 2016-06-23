@@ -1,8 +1,13 @@
-char a:0;
-char b:5;
-char c:7;
+int a:0;
+int b:5;
+int c:7;
 
 int main()
 {
-	a = b+c
+	if(a < 0)
+	{
+		a = b+c
+	}
+	else
+		return 0
 };

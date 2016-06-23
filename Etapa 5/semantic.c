@@ -354,12 +354,16 @@ int isFuncallValid(ASTREE* root, ASTREE* node) // implementar - implementado
             if(addExpressionTypes(dec_type,call_type)==DATATYPE_ERROR){
                 return 2;//tipo de variavel incompativel na chamada de funcao
             }
+
+			//funcall_param_list->son[0]->type = declaration_param_list->son[0]->symbol; /////////////
+
             if (declaration_param_list->son[2])
             declaration_param_list=declaration_param_list->son[2]->son[0];
             else
                 declaration_param_list=NULL;
             if (funcall_param_list->son[1])
-            funcall_param_list=funcall_param_list->son[1]->son[0];
+            	funcall_param_list=funcall_param_list->son[1]->son[0];
+			
             else
                 funcall_param_list=NULL;
         }
