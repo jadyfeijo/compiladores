@@ -81,9 +81,6 @@ void asmGenerate(char* filename, TAC* tac)
 				switch(loop)
 				{
 					case 1:
-                        if(tac->res->dataType == DATATYPE_INT)
-                            
-                        {
                             if (tac->op1->dataType == DATATYPE_INT && tac->op2->dataType == DATATYPE_INT) {
                                 fprintf(file, "\tmovl	_%s(%%rip), %%ecx\n", tac->op1->text);
                                 fprintf(file, "\taddl	_%s(%%rip), %%ecx\n", tac->op2->text);
@@ -106,39 +103,7 @@ void asmGenerate(char* filename, TAC* tac)
                                 fprintf(file, "\taddl	_%s(%%rip), %%ecx\n", tac->op2->text);
                                 fprintf(file, "\tmovl	%%ecx, _%s(%%rip)\n", tac->res->text);
                             }
-                            
-                        }
-                        if(tac->res->dataType == DATATYPE_CHAR)
-                        {
-                            if (tac->op1->dataType == DATATYPE_CHAR && tac->op2->dataType == DATATYPE_CHAR){
-                                fprintf(file, "\tmovsbl	_%s(%%rip), %%ecx\n", tac->op1->text);
-                                fprintf(file, "\tmovsbl	_%s(%%rip), %%edx\n", tac->op2->text);
-                                fprintf(file, "\taddl	%%edx, %%ecx\n");
-                                fprintf(file, "\tmovb	%%cl, %%sil\n");
-                                fprintf(file, "\tmovb	%%sil, _%s(%%rip)\n", tac->res->text);
-                            }
-                            if (tac->op1->dataType == DATATYPE_INT && tac->op2->dataType == DATATYPE_INT){
-                                fprintf(file, "\tmovl	_%s(%%rip), %%ecx\n", tac->op1->text);
-                                fprintf(file, "\taddl	_%s(%%rip), %%ecx\n", tac->op2->text);
-                                fprintf(file, "\tmovb	%%cl, %%dl\n");
-                                fprintf(file, "\tmovb	%%dl, _%s(%%rip)\n", tac->res->text);
-                            }
-                            
-                            if (tac->op1->dataType == DATATYPE_CHAR && tac->op2->dataType == DATATYPE_INT){
-                                fprintf(file, "\tmovsbl	_%s(%%rip), %%ecx\n", tac->op1->text);
-                                fprintf(file, "\taddl	_%s(%%rip), %%ecx\n", tac->op2->text);
-                                fprintf(file, "\tmovb	%%cl, %%dl\n");
-                                fprintf(file, "\tmovb	%%dl, _%s(%%rip)\n", tac->res->text);
-                            }
-                            
-                            if (tac->op1->dataType == DATATYPE_INT && tac->op2->dataType == DATATYPE_CHAR){
-                                fprintf(file, "\tmovl	_%s(%%rip), %%ecx\n", tac->op1->text);
-                                fprintf(file, "\tmovsbl	_%s(%%rip), %%edx\n", tac->op2->text);
-                                fprintf(file, "\taddl	%%edx, %%ecx\n");
-                                fprintf(file, "\tmovb	%%cl, %%sil\n");
-                                fprintf(file, "\tmovb	%%sil, _%s(%%rip)\n", tac->res->text);
-                            }
-                        }
+                        
                         break;
 					default: break;
 				}
@@ -148,7 +113,7 @@ void asmGenerate(char* filename, TAC* tac)
                 switch(loop)
                 {
                     case 1:
-                        if(tac->res->dataType == DATATYPE_INT)
+                        if(tac->op1->dataType == DATATYPE_INT && tac->op2->dataType == DATATYPE_INT)
                             
                         {
                             fprintf(file, "\tmovl	_%s(%%rip), %%ecx\n", tac->op1->text);
@@ -156,14 +121,25 @@ void asmGenerate(char* filename, TAC* tac)
                             fprintf(file, "\tmovl	%%ecx, _%s(%%rip)\n", tac->res->text);
                             
                         }
-                        if(tac->res->dataType == DATATYPE_CHAR)
+                        if(tac->op1->dataType == DATATYPE_CHAR && tac->op2->dataType == DATATYPE_CHAR)
                         {
                             fprintf(file, "\tmovsbl	_%s(%%rip), %%ecx\n", tac->op1->text);
                             fprintf(file, "\tmovsbl	_%s(%%rip), %%edx\n", tac->op2->text);
                             fprintf(file, "\tsubl	%%edx, %%ecx\n");
-                            fprintf(file, "\tmovb	%%cl, %%sil\n");
-                            fprintf(file, "\tmovb	%%sil, _%s(%%rip)\n", tac->res->text);
+                            fprintf(file, "\tmovl	%%ecx, _%s(%%rip)\n", tac->res->text);
                         }
+                        if (tac->op1->dataType == DATATYPE_INT && tac->op2->dataType == DATATYPE_CHAR) {
+                            fprintf(file, "\tmovl	_%s(%%rip), %%ecx\n", tac->op1->text);
+                            fprintf(file, "\tmovsbl	_%s(%%rip), %%edx\n", tac->op2->text);
+                            fprintf(file, "\tsubl	%%edx, %%ecx\n");
+                            fprintf(file, "\tmovl	%%ecx, _%s(%%rip)\n", tac->res->text);
+                        }
+                        if (tac->op1->dataType == DATATYPE_CHAR && tac->op2->dataType == DATATYPE_INT){
+                            fprintf(file, "\tmovsbl	_%s(%%rip), %%ecx\n", tac->op1->text);
+                            fprintf(file, "\tsubl	_%s(%%rip), %%ecx\n", tac->op2->text);
+                            fprintf(file, "\tmovl	%%ecx, _%s(%%rip)\n", tac->res->text);
+                        }
+
                         break;
                     default: break;
                 }
@@ -173,23 +149,33 @@ void asmGenerate(char* filename, TAC* tac)
                 switch(loop)
                 {
                     case 1:
-                        if(tac->res->dataType == DATATYPE_INT)
+                        if(tac->op1->dataType == DATATYPE_INT && tac->op2->dataType == DATATYPE_INT)
                             
                         {
-                            //printf ("allalaalalalal %s", tac->res->dataType);
                             fprintf(file, "\tmovl	_%s(%%rip), %%ecx\n", tac->op1->text);
                             fprintf(file, "\timull	_%s(%%rip), %%ecx\n", tac->op2->text);
                             fprintf(file, "\tmovl	%%ecx, _%s(%%rip)\n", tac->res->text);
                             
                         }
-                        if(tac->res->dataType == DATATYPE_CHAR)
+                        if(tac->op1->dataType == DATATYPE_CHAR && tac->op2->dataType == DATATYPE_CHAR)
                         {
                             fprintf(file, "\tmovsbl	_%s(%%rip), %%ecx\n", tac->op1->text);
                             fprintf(file, "\tmovsbl	_%s(%%rip), %%edx\n", tac->op2->text);
                             fprintf(file, "\timull	%%edx, %%ecx\n");
-                            fprintf(file, "\tmovb	%%cl, %%sil\n");
-                            fprintf(file, "\tmovb	%%sil, _%s(%%rip)\n", tac->res->text);
+                            fprintf(file, "\tmovl	%%ecx, _%s(%%rip)\n", tac->res->text);
                         }
+                        if (tac->op1->dataType == DATATYPE_INT && tac->op2->dataType == DATATYPE_CHAR) {
+                            fprintf(file, "\tmovl	_%s(%%rip), %%ecx\n", tac->op1->text);
+                            fprintf(file, "\tmovsbl	_%s(%%rip), %%edx\n", tac->op2->text);
+                            fprintf(file, "\timull	%%edx, %%ecx\n");
+                            fprintf(file, "\tmovl	%%ecx, _%s(%%rip)\n", tac->res->text);
+                        }
+                        if (tac->op1->dataType == DATATYPE_CHAR && tac->op2->dataType == DATATYPE_INT){
+                            fprintf(file, "\tmovsbl	_%s(%%rip), %%ecx\n", tac->op1->text);
+                            fprintf(file, "\timull	_%s(%%rip), %%ecx\n", tac->op2->text);
+                            fprintf(file, "\tmovl	%%ecx, _%s(%%rip)\n", tac->res->text);
+                        }
+
                         break;
                     default: break;
                 }
@@ -199,32 +185,53 @@ void asmGenerate(char* filename, TAC* tac)
                 switch(loop)
                 {
                     case 1:
-                        if(tac->res->dataType == DATATYPE_INT)
+                        if(tac->op1->dataType == DATATYPE_INT && tac->op2->dataType == DATATYPE_INT)
                             
                         {
                             fprintf(file, "\tmovl	_%s(%%rip), %%ecx\n", tac->op1->text);
                             fprintf(file, "\tmovl	%%eax, -4(%%rbp)          ## 4-byte Spill\n");
                             fprintf(file, "\tmovl	%%ecx, %%eax\n");
                             fprintf(file, "\tcltd\n");
-                            fprintf(file, "idivl	_%s(%%rip)\n",tac->op2->text);
+                            fprintf(file, "\tidivl	_%s(%%rip)\n",tac->op2->text);
                             fprintf(file, "\tmovl	%%eax, _%s(%%rip)\n", tac->res->text);
                             fprintf(file, "\tmovl	-4(%%rbp), %%eax          ## 4-byte Reload\n");
                             
                         }
-                        if(tac->res->dataType == DATATYPE_CHAR)
+                        if(tac->op1->dataType == DATATYPE_CHAR && tac->op2->dataType == DATATYPE_CHAR)
                         {
-                            fprintf(file, "\tmovl	_%s(%%rip), %%ecx\n", tac->op1->text);
-                            fprintf(file, "\tmovl	_%s(%%rip), %%edx\n", tac->op2->text);
+                            fprintf(file, "\tmovsbl	_%s(%%rip), %%ecx\n", tac->op1->text);
+                            fprintf(file, "\tmovsbl	_%s(%%rip), %%edx\n", tac->op2->text);
                             fprintf(file, "\tmovl	%%eax, -4(%%rbp)          ## 4-byte Spill\n");
                             fprintf(file, "\tmovl	%%ecx, %%eax\n");
                             fprintf(file, "\tmovl	%%edx, -8(%%rbp)          ## 4-byte Spill\n");
                             fprintf(file, "\tcltd\n");
                             fprintf(file, "\tmovl	-8(%%rbp), %%ecx          ## 4-byte Reload\n");
                             fprintf(file, "\tidivl  %%ecx\n");
-                            fprintf(file, "\tmovb   %%al, %%sil\n");
-                            fprintf(file, "\tmovl	%%sil, _%s(%%rip)\n", tac->res->text);
+                            fprintf(file, "\tmovl	%%eax, _%s(%%rip)\n", tac->res->text);
                             fprintf(file, "\tmovl	-4(%%rbp), %%eax          ## 4-byte Reload\n");
                         }
+                        if (tac->op1->dataType == DATATYPE_INT && tac->op2->dataType == DATATYPE_CHAR) {
+                            fprintf(file, "\tmovl	_%s(%%rip), %%ecx\n", tac->op1->text);
+                            fprintf(file, "\tmovsbl	_%s(%%rip), %%edx\n", tac->op2->text);
+                            fprintf(file, "\tmovl	%%eax, -4(%%rbp)          ## 4-byte Spill\n");
+                            fprintf(file, "\tmovl	%%ecx, %%eax\n");
+                            fprintf(file, "\tmovl	%%edx, -8(%%rbp)          ## 4-byte Spill\n");
+                            fprintf(file, "\tcltd\n");
+                            fprintf(file, "\tmovl	-8(%%rbp), %%ecx          ## 4-byte Reload\n");
+                            fprintf(file, "\tidivl  %%ecx\n");
+                            fprintf(file, "\tmovl	%%eax, _%s(%%rip)\n", tac->res->text);
+                            fprintf(file, "\tmovl	-4(%%rbp), %%eax          ## 4-byte Reload\n");
+                        }
+                        if (tac->op1->dataType == DATATYPE_CHAR && tac->op2->dataType == DATATYPE_INT){
+                            fprintf(file, "\tmovsbl	_%s(%%rip), %%ecx\n", tac->op1->text);
+                            fprintf(file, "\tmovl	%%eax, -4(%%rbp)          ## 4-byte Spill\n");
+                            fprintf(file, "\tmovl	%%ecx, %%eax\n");
+                            fprintf(file, "\tcltd\n");
+                            fprintf(file, "\tidivl	_%s(%%rip)\n",tac->op2->text);
+                            fprintf(file, "\tmovl	%%eax, _%s(%%rip)\n", tac->res->text);
+                            fprintf(file, "\tmovl	-4(%%rbp), %%eax          ## 4-byte Reload\n");
+                        }
+
                         break;
                     default: break;
                 }

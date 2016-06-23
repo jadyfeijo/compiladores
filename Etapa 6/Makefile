@@ -37,4 +37,4 @@ asm.o: asm.c
 	gcc -c asm.c
 
 clean:
-	rm -f lex.yy.c lex.yy.h y.tab.c y.tab.h *.o etapa6
+	rm -f lex.yy.c lex.yy.h y.tab.c y.tab.h *.o etapa6 asm.s

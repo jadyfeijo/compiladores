@@ -1,10 +1,8 @@
 	.section	__TEXT,__text,regular,pure_instructions
 	.macosx_version_min 10, 11
-
-
 	.globl	_main
 	.align	4, 0x90
-_main:
+_main:                                  ## @main
 	.cfi_startproc
 ## BB#0:
 	pushq	%rbp
@@ -19,30 +17,26 @@ Ltmp2:
 	movsbl	_b(%rip), %ecx
 	movsbl	_c(%rip), %edx
 	addl	%edx, %ecx
-	movb	%cl, %sil
-	movb	%sil, _TempVAR0(%rip)
+	movl	%ecx, _a(%rip)
 	popq	%rbp
 	retq
 	.cfi_endproc
 
-
+	.globl	_a                      ## @a
+.zerofill __DATA,__common,_a,4,2
 	.section	__DATA,__data
-	.globl	_a
-	.align	2
-_a:
-	.long	0
-
-	.globl	_b
-	.align	2
+	.globl	_b                      ## @b
 _b:
-	.byte	5
+	.byte	5                       ## 0x5
 
-	.globl	_c
-	.align	2
+	.globl	_c                      ## @c
 _c:
-	.byte	7
+	.byte	7                       ## 0x7
 
-	.globl	_d
+	.globl	_d                      ## @d
 	.align	2
 _d:
-	.long	7
+	.long	7                       ## 0x7
+
+
+.subsections_via_symbols
