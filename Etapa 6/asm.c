@@ -231,7 +231,8 @@ void asmGenerate(char* filename, TAC* tac)
                 break;
 
 			
-			case TAC_LESS: // 8
+			case TAC_LESS:
+                // 8
 				//fprintf(stderr, "TAC_LESS");
 				break;
 
