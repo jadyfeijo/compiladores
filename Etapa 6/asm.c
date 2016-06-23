@@ -81,8 +81,6 @@ void asmGenerate(char* filename, TAC* tac)
 				switch(loop)
 				{
 					case 1:
-                        printf ("allalaalalalal %d", tac->res->dataType);
-
                         if(tac->res->dataType == DATATYPE_INT)
                             
                         {

@@ -5,10 +5,7 @@ int d:7;
 
 int main()
 {
-	if (a>1){
-		a = b+c;
-	}
-	else {
-		a = b+b;
-	}
+	a =b+c
+
 };
+

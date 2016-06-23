@@ -1,9 +1,10 @@
-#include <stdio.h>
-char b='5';
-char a='6';
-int c='0';
-int main ()
-{
+int a=0;
+char b=5;
+char c=7;
+int d=7;
 
-    c=a+b;
+int main()
+{
+    a =b+c;
+    
 }
