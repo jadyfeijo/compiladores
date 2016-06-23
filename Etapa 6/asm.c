@@ -2,6 +2,8 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+
 
 int loop = 0;
 int firstPrint = 0;
@@ -84,8 +86,15 @@ void asmGenerate(char* filename, TAC* tac)
 				{
 					case 1:
                             if (tac->op1->dataType == DATATYPE_INT && tac->op2->dataType == DATATYPE_INT) {
-                                fprintf(file, "\tmovl	_%s(%%rip), %%ecx\n", tac->op1->text);
-                                fprintf(file, "\taddl	_%s(%%rip), %%ecx\n", tac->op2->text);
+                                if (tac->op1->type==301)
+                                    fprintf(file, "\tmovl	$%s, %%ecx\n", tac->op1->text);
+                                else
+                                    fprintf(file, "\tmovl	_%s(%%rip), %%ecx\n", tac->op1->text);
+
+                                if (tac->op2->type==301)
+                                    fprintf(file, "\taddl	$%s, %%ecx\n", tac->op2->text);
+                                else
+                                    fprintf(file, "\taddl	_%s(%%rip), %%ecx\n", tac->op2->text);
                                 fprintf(file, "\tmovl	%%ecx, _%s(%%rip)\n", tac->res->text);
                             }
                             if (tac->op1->dataType == DATATYPE_CHAR && tac->op2->dataType == DATATYPE_CHAR){
@@ -105,6 +114,47 @@ void asmGenerate(char* filename, TAC* tac)
                                 fprintf(file, "\taddl	_%s(%%rip), %%ecx\n", tac->op2->text);
                                 fprintf(file, "\tmovl	%%ecx, _%s(%%rip)\n", tac->res->text);
                             }
+                        
+                        break;
+
+                        case 2:
+                        if(!firstVar)
+                        {
+                            fprintf(file, "\n\n\t.section\t__DATA,__data");
+                            firstVar = 1;
+                        }
+                        TAC* tac1 = tac0;
+                        int a,b;
+
+                        if(tac->op1->type == 307)
+                        {
+                            while(strcmp(tac->op1->text, tac1->res->text))
+                            {
+                                tac1 = tac1->next;
+                            }
+                            a = atoi(tac1->next->op1->text);
+                        }
+                        else {
+                            a = atoi(tac->op1->text);
+                        }
+                        tac1=tac0;
+                        if(tac->op2->type == 307) {
+                            while(strcmp(tac->op2->text, tac1->res->text))
+                            {
+                                tac1 = tac1->next;
+                            }
+                            printf ("dsadsadasdsadsads %s", tac1->next->op1->text);
+                            b = atoi(tac1->next->op1->text);
+                        }
+                        else {
+                            b = atoi(tac->op2->text);
+                        }
+                        int c = a+ b;
+                       
+                        if(tac->res->dataType == DATATYPE_INT)
+                        fprintf(file, "\n\t.globl\t_%s\n\t.align\t2\n_%s:\n\t.long\t%d\n", tac->res->text, tac->res->text,c);
+                        if(tac->res->dataType == DATATYPE_CHAR)
+                        fprintf(file, "\n\t.globl\t_%s\n\t.align\t2\n_%s:\n\t.byte\t%d\n", tac->res->text, tac->res->text,c);
                         
                         break;
 					default: break;
@@ -452,17 +502,32 @@ void asmGenerate(char* filename, TAC* tac)
 				switch(loop)
 				{
 					case 1:
-						if(tac->res->dataType == DATATYPE_INT) // aparentemente o return nada mais eh do qum move para o rbp, e a funcao poppa ele pra q, que entao realiza retq
-						{
-							intc++;
-							fprintf(file, "\tmovl	$%s, -%d(%%rbp)\n", tac->res->text, (4*intc)+charc);
-					
-						}
-						if(tac->res->dataType == DATATYPE_CHAR)
-						{
-								charc++;
-								fprintf(file, "\tmovb	$%s, -%d(%%rbp)\n", tac->res->text, (4*intc)+charc);
-						}
+                        if (tac->res->type == 301) {
+                            if(tac->res->dataType == DATATYPE_INT) // aparentemente o return nada mais eh do qum move para o rbp, e a funcao poppa ele pra q, que entao realiza retq
+                            {
+                                intc++;
+                                fprintf(file, "\tmovl	$%s, -%d(%%rbp)\n", tac->res->text, (4*intc)+charc);
+                        
+                            }
+                            if(tac->res->dataType == DATATYPE_CHAR)
+                            {
+                                    charc++;
+                                    fprintf(file, "\tmovb	$%s, -%d(%%rbp)\n", tac->res->text, (4*intc)+charc);
+                            }
+                        }
+                        if (tac->res->type == 307) {
+                            if(tac->res->dataType == DATATYPE_INT) // aparentemente o return nada mais eh do qum move para o rbp, e a funcao poppa ele pra q, que entao realiza retq
+                            {
+                                intc++;
+                                fprintf(file, "\tmovl	_%s(%%rip), %%eax\n", tac->res->text);
+                                
+                            }
+                            if(tac->res->dataType == DATATYPE_CHAR)
+                            {
+                                charc++;
+                                fprintf(file, "\tmovb	_%s(%%rip), %%eax\n", tac->res->text);
+                            }
+                        }
 						break;
 					default: break;	
 				}
@@ -475,11 +540,11 @@ void asmGenerate(char* filename, TAC* tac)
                         
                             fprintf(file, "\tsubq	$16, %%rsp\n");
                             if (!printc) {
-                                fprintf(file, "\tleaq	L_.str(%%rip), %rdi\n");
+                                fprintf(file, "\tleaq	L_.str(%%rip), %%rdi\n");
                                 printc++;
                             }
                             else {
-                                fprintf(file, "\tleaq	L_.str.%d(%rip), %rdi" , printc);
+                                fprintf(file, "\tleaq	L_.str.%d(%%rip), %%rdi" , printc);
                                 printc++;
                             }
                             fprintf(file, "\tmovb	$0, %%al\n");
@@ -520,7 +585,7 @@ void asmGenerate(char* filename, TAC* tac)
 				{
 					case 1:
 						if(tac->op1->type == 301)
-							fprintf(file, "\tmovl\t$%s, _%s(%%rip)\n", tac->op1->text, tac->res->text); 
+							fprintf(file, "\tmovl\t$%s, $%s(%%rip)\n", tac->op1->text, tac->res->text);
 						if(tac->op1->type == 307)
 						{
 							fprintf(file, "\tmovl\t_%s(%%rip), %%ecx\n", tac->op1->text);
@@ -570,6 +635,43 @@ void asmGenerate(char* filename, TAC* tac)
                     case 1:
                         fprintf(file, "\tcallq	_%s\n", tac->res->text);
                         break;
+                    case 2:
+                        if(!firstVar)
+                        {
+                            fprintf(file, "\n\n\t.section\t__DATA,__data");
+                            firstVar = 1;
+                        }
+                        TAC* tac1 = tac0;
+                        int a,b;
+                        while (!(!strcmp(tac->op1->text,tac1->res->text) && tac1->type == TAC_BEGINFUN)) {
+                            tac1=tac1->next;
+                        }
+                        while (tac1->type != TAC_RET) {
+                            tac1=tac1->next;
+                        }
+                     /*   TAC* tac2 = tac0;
+
+                        if(tac->res->type == 307)
+                        {
+                            while(strcmp(tac->res->text, tac2->res->text))
+                            {
+                                tac1 = tac1->next;
+                            }
+                            a = atoi(tac1->next->op1->text);
+                        }
+                        else {
+                            a = atoi(tac->op1->text);
+                        }*/
+                        
+                        
+                        ///////
+                      /*  if(tac->res->dataType == DATATYPE_INT)
+                            fprintf(file, "\n\t.globl\t_%s\n\t.align\t2\n_%s:\n\t.long\t%d\n", tac->res->text, tac->res->text,c);
+                        if(tac->res->dataType == DATATYPE_CHAR)
+                            fprintf(file, "\n\t.globl\t_%s\n\t.align\t2\n_%s:\n\t.byte\t%d\n", tac->res->text, tac->res->text,c);*/
+                        
+                        break;
+
                     default: break;	    
                 }
 

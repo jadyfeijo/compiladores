@@ -5,5 +5,5 @@ int c=0;
 int main ()
 {
 
-    c=a+b;
+    c=a+3;
 }
