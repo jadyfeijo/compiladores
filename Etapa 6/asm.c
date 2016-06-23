@@ -319,10 +319,38 @@ void asmGenerate(char* filename, TAC* tac)
 
 			case TAC_AND: // 14
 				//fprintf(stderr, "TAC_AND");
+				switch(loop)
+				{
+					case 1:
+						fprintf(file, "\tmovl\t$0, -4(%%rbp)\n");
+						fprintf(file, "\tcmpl\t$0, _%s(%%rip)\n", tac->op1->text);
+						fprintf(file, "\tje\tLBB0_%d\n", labc);
+						fprintf(file, "## BB#%d:\n", bbc);
+						bbc++;
+						fprintf(file, "\tcmpl\t$0, _%s(%%rip)\n", tac->op2->text);
+						fprintf(file, "\tje\tLBB0_%d\n", labc);
+						//fprintf(file, "## BB#%d:\n", bbc);
+						//bbc++;
+					break;
+				}
 				break;
 
 			case TAC_OR: // 15
 				//fprintf(stderr, "TAC_OR");
+				switch(loop)
+				{
+					case 1:
+						fprintf(file, "\tmovl\t$0, -4(%%rbp)\n");
+						fprintf(file, "\tcmpl\t$0, _%s(%%rip)\n", tac->op1->text);
+						fprintf(file, "\tjne\tLBB0_%d\n", labc);
+						fprintf(file, "## BB#%d:\n", bbc);
+						bbc++;
+						fprintf(file, "\tcmpl\t$0, _%s(%%rip)\n", tac->op2->text);
+						fprintf(file, "\tje\tLBB0_%d\n", labc);
+						//fprintf(file, "## BB#%d:\n", bbc);
+						//bbc++;
+					break;
+				}
 				break;
 
 			case TAC_BEGINFUN: // 16
