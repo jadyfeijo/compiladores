@@ -52,7 +52,7 @@ TAC* generateCode(ASTREE *node) {
 		case ASTREE_IF: return makeIfThen(code[0], code[1]); break;
         case ASTREE_IFTE: return makeIfThenElse(code[0], code[1], code[2]); break;
         case ASTREE_WHILE: return makeWhile(code[0],code[1]); break;
-		case ASTREE_FUNCALL: return tacJoin(code[1], tacCreate(TAC_FUNCALL,makeTemp(),node->son[0]->symbol,0)); break;
+		case ASTREE_FUNCALL: return tacJoin(code[1], tacCreate(TAC_FUNCALL,makeTemp(SYMBOL_VAR),node->son[0]->symbol,0)); break;
 		//case ASTREE_FUNCALL: return tacJoin(code[1], tacJoin( tacCreate(TAC_ARG,node->son[1]->symbol,node->son[1]->son[1]->symbol,0),tacCreate(TAC_FUNCALL,makeTemp(),node->son[0]->symbol,0))); break;
         /*case ASTREE_FUNCALL: label = makeLabel();  return tacJoin(code[1],tacJoin(tacJoin(tacCreate(TAC_FUNCALL,node->son[0]->symbol,label,0),tacJoin(tacCreate(TAC_JUMP,node->son[0]->symbol,0,0),tacCreate(TAC_LABEL,label,0,0))),tacCreate(TAC_PUSH,makeTemp(),0,0))); break;*/
         case ASTREE_CALL_PAR: return tacJoin(tacJoin(code[0],tacCreate(TAC_ARG,node->symbol,code[0]->res,0)),code[1]); break;
@@ -62,7 +62,7 @@ TAC* generateCode(ASTREE *node) {
         case ASTREE_OUTLIST: return tacJoin(tacJoin(code[0],tacCreate(TAC_PRINT,code[0]->res,0,0)),code[1]);break;
         case ASTREE_OUTLIST2: return code[0]; break;
         case ASTREE_ID: return tacCreate(TAC_SYMBOL,node->son[0]->symbol,0,0); break;
-		case ASTREE_VEC: return tacJoin(code[1],tacCreate(TAC_VEC_INDEX,makeTemp(),node->son[0]->symbol,code[1]->res)); break;
+		case ASTREE_VEC: return tacJoin(code[1],tacCreate(TAC_VEC_INDEX,makeTemp(SYMBOL_VAR),node->son[0]->symbol,code[1]->res)); break;
         default: break;
     }
     
@@ -70,8 +70,64 @@ TAC* generateCode(ASTREE *node) {
                                                                       
 }
 
+int combineTypes(int type1, int type2)
+{
+	fprintf(stderr, ">>> %d %d", type1, type2);
+    switch (type1) 
+	{
+        case DATATYPE_BOOL:
+            switch (type2) 
+			{
+                case DATATYPE_BOOL:
+                    return SYMBOL_LIT_BOOL;
+                default:
+                    return DATATYPE_ERROR;
+            }
+			//break;
+        case DATATYPE_INT:
+            switch (type2) 
+			{
+                case DATATYPE_INT:
+                    return SYMBOL_LIT_INT;
+                case DATATYPE_CHAR:
+                    return SYMBOL_LIT_INT;
+                case DATATYPE_REAL:
+                    return SYMBOL_LIT_REAL;
+                default:
+                    return DATATYPE_ERROR;
+            }
+			//break;
+        case DATATYPE_CHAR:
+            switch (type2) 
+			{
+                case DATATYPE_INT:
+                    return SYMBOL_LIT_INT;
+                case DATATYPE_CHAR:
+                    return SYMBOL_LIT_CHAR;
+                case DATATYPE_REAL:
+                    return SYMBOL_LIT_REAL;
+                default:
+                    return DATATYPE_ERROR;
+            }
+			//break;
+        case DATATYPE_REAL:
+            switch (type2) 
+			{
+                case DATATYPE_BOOL:
+                    return DATATYPE_ERROR;
+                case DATATYPE_ERROR:
+                    return DATATYPE_ERROR;
+                default:
+                    return SYMBOL_LIT_REAL;
+            }
+			//break;
+        default:
+            return DATATYPE_ERROR;
+    }
+}
+
 TAC* makeBinOp(int type, TAC* code0, TAC* code1) {
-    return tacJoin(tacJoin(code0,code1),tacCreate(type,makeTemp(),code0?code0->res:0,code1?code1->res:0));
+    return tacJoin(tacJoin(code0,code1),tacCreate(type,makeTemp(combineTypes(code0?code0->res->dataType:0, code1?code1->res->dataType:0)),code0?code0->res:0,code1?code1->res:0));
 
 }
 

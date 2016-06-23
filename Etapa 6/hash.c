@@ -68,6 +68,7 @@ HASH_NODE *hashInsert(char *text, int type)
 		else if(type == 303) new_node->dataType = DATATYPE_BOOL;
 			else if(type == 304) new_node->dataType = DATATYPE_CHAR;
 				else if(type == 305) new_node->dataType = DATATYPE_STRING;
+					//else if(type == 307) new_node->dataType = DATATYPE_INT;
 
 	new_node->next = hash_table[address];
 	hash_table[address] = new_node;
@@ -102,13 +103,13 @@ void checkUndeclared(void)
 				fprintf(stderr, "Symbol %s undeclared\n", node->text);
 }
 
-HASH_NODE *makeTemp(void)
+HASH_NODE *makeTemp(int type)
 {
 	static int nextTemp = 0;
 	static char buffer[256];
 
 	sprintf(buffer, "TempVAR%d", nextTemp++);
-	return (hashInsert(buffer, SYMBOL_VAR));
+	return (hashInsert(buffer, type));
 }
 
 HASH_NODE *makeLabel(void)
