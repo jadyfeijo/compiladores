@@ -15,18 +15,18 @@ Ltmp2:
 	.cfi_def_cfa_register %rbp
 	xorl	%eax, %eax
 	movl	_a(%rip), %ecx
-	addl	_b(%rip), %ecx
-	movb	%cl, %dl
-	movb	%dl, _c(%rip)
+	movsbl	_b(%rip), %edx
+	addl	%edx, %ecx
+	movb	%cl, %sil
+	movb	%sil, _c(%rip)
 	popq	%rbp
 	retq
 	.cfi_endproc
 
 	.section	__DATA,__data
 	.globl	_b                      ## @b
-	.align	2
 _b:
-	.long	5                       ## 0x5
+	.byte	5                       ## 0x5
 
 	.globl	_a                      ## @a
 	.align	2

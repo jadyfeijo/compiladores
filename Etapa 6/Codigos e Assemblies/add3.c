@@ -1,7 +1,7 @@
 #include <stdio.h>
-int b=5;
-int a=6;
-char c=0;
+char b='5';
+int a='6';
+int c='0';
 int main ()
 {
 

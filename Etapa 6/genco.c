@@ -146,10 +146,14 @@ TAC* makeIfThenElse(TAC* code0, TAC* code1, TAC* code2) {
     TAC* newifelse;
     HASH_NODE* newlabel;
     HASH_NODE* newlabel2;
+    HASH_NODE* newlabel3;
     
     newlabel = makeLabel();
     newlabel2 = makeLabel();
-    return newifelse = tacJoin(code0,tacJoin(tacCreate(TAC_IFZ,newlabel,code0->res,0),tacJoin(code1,tacJoin(tacCreate(TAC_LABEL,newlabel,0,0),code2))));
+    newlabel3 = makeLabel();
+  //  return newifelse = tacJoin(code0,tacJoin(tacCreate(TAC_IFZ,newlabel,code0->res,0),tacJoin(code1,tacJoin(tacCreate(TAC_LABEL,newlabel,0,0),code2))));
+    
+    return newifelse = tacJoin(code0,tacJoin(tacJoin(tacCreate(TAC_IFZ,code0->res,newlabel,newlabel2),tacCreate(TAC_LABEL,newlabel,0,0)),tacJoin(tacJoin(code2,tacCreate(TAC_JUMP,newlabel3,0,0)),tacJoin(tacCreate(TAC_LABEL,newlabel2,0,0),tacJoin(code2,tacCreate(TAC_LABEL,newlabel3,0,0))))));
 }
 
 TAC* makeWhile(TAC* code0,TAC* code1) {

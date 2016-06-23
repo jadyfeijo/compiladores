@@ -14,7 +14,7 @@ Ltmp1:
 Ltmp2:
 	.cfi_def_cfa_register %rbp
 	xorl	%eax, %eax
-	movl	_a(%rip), %ecx
+	movsbl	_a(%rip), %ecx
 	addl	_b(%rip), %ecx
 	movb	%cl, %dl
 	movb	%dl, _c(%rip)
@@ -29,9 +29,8 @@ _b:
 	.long	5                       ## 0x5
 
 	.globl	_a                      ## @a
-	.align	2
 _a:
-	.long	6                       ## 0x6
+	.byte	6                       ## 0x6
 
 	.globl	_c                      ## @c
 .zerofill __DATA,__common,_c,1,0
