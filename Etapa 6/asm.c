@@ -45,6 +45,16 @@ void asmGenerate(char* filename, TAC* tac)
 			
 			case TAC_LABEL: // 2
 				//fprintf(stderr, "TAC_LABEL");
+				switch(loop)
+				{
+					case 1:
+						//fprintf(file, "\tjmp LBB0_%d\n",labc);
+						fprintf(file, "LBB0_%d\n",labc);
+						labc++;
+						break;
+//jmp	LBB0_2
+//LBB0_2:
+				}
 				break;	
 			
 			case TAC_MOVE: // 3
@@ -74,7 +84,7 @@ void asmGenerate(char* filename, TAC* tac)
                         if(tac->res->dataType == DATATYPE_INT)
                             
                         {
-                            printf ("allalaalalalal %s", tac->res->dataType);
+                    
                             fprintf(file, "\tmovl	_%s(%%rip), %%ecx\n", tac->op1->text);
                             fprintf(file, "\taddl	_%s(%%rip), %%ecx\n", tac->op2->text);
                             fprintf(file, "\tmovl	%%ecx, _%s(%%rip)\n", tac->res->text);
@@ -125,7 +135,7 @@ void asmGenerate(char* filename, TAC* tac)
                         if(tac->res->dataType == DATATYPE_INT)
                             
                         {
-                            printf ("allalaalalalal %s", tac->res->dataType);
+                            //printf ("allalaalalalal %s", tac->res->dataType);
                             fprintf(file, "\tmovl	_%s(%%rip), %%ecx\n", tac->op1->text);
                             fprintf(file, "\timull	_%s(%%rip), %%ecx\n", tac->op2->text);
                             fprintf(file, "\tmovl	%%ecx, _%s(%%rip)\n", tac->res->text);
@@ -258,11 +268,15 @@ void asmGenerate(char* filename, TAC* tac)
 				switch(loop)
 				{
 					case 1:
-						fprintf(file, "\tmovl\t$0,\t-4(%%rbp)");
-						fprintf(file, "\tcmpl\t$0,\t_%s(%%rip)"tac->op1->text);
-						fprintf(file, "\tje\tLBB0_%d",);
-						fprintf(file, "## BB#%d",bbc);
+						fprintf(file, "\tmovl\t$0,\t-4(%%rbp)\n");
+						fprintf(file, "\tcmpl\t$0,\t_%s(%%rip)\n", tac->op1->text);
+						fprintf(file, "\tje\tLBB0_%d\n",labc);
+						fprintf(file, "## BB#%d\n",bbc);
 						bbc++;
+						//labc++;
+						break;
+ 
+					default: break;
 						//fprintf(file, "
 	//movl	$0,	-4(%rbp)
 	//cmpl	$0, _a(%rip)
