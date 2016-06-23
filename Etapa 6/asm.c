@@ -235,26 +235,80 @@ void asmGenerate(char* filename, TAC* tac)
 			
 			case TAC_LESS: // 8
 				//fprintf(stderr, "TAC_LESS");
+				switch(loop)
+				{
+					case 1:
+						fprintf(file, "\tmovl\t$0, -4(%%rbp)\n");
+						fprintf(file, "\tmovl\t_%s(%%rip), %%eax\n", tac->op1->text);
+						fprintf(file, "\tcmpl\t_%s(%%rip), %%eax\n", tac->op2->text);
+						fprintf(file, "\tjge\tLBB0_%d\n", labc);
+					break;
+				}
 				break;
 
 			case TAC_GREATER: // 9
 				//fprintf(stderr, "TAC_GREATER");
+				switch(loop)
+				{
+					case 1:
+						fprintf(file, "\tmovl\t$0, -4(%%rbp)\n");
+						fprintf(file, "\tmovl\t_%s(%%rip), %%eax\n", tac->op1->text);
+						fprintf(file, "\tcmpl\t_%s(%%rip), %%eax\n", tac->op2->text);
+						fprintf(file, "\tjle\tLBB0_%d\n", labc);
+					break;
+				}
 				break;
 			
 			case TAC_LE: // 10
 				//fprintf(stderr, "TAC_LE");
+				switch(loop)
+				{
+					case 1:
+						fprintf(file, "\tmovl\t$0, -4(%%rbp)\n");
+						fprintf(file, "\tmovl\t_%s(%%rip), %%eax\n", tac->op1->text);
+						fprintf(file, "\tcmpl\t_%s(%%rip), %%eax\n", tac->op2->text);
+						fprintf(file, "\tjg\tLBB0_%d\n", labc);
+					break;
+				}
 				break;	
 			
 			case TAC_GE: // 11
 				//fprintf(stderr, "TAC_GE");
+				switch(loop)
+				{
+					case 1:
+						fprintf(file, "\tmovl\t$0, -4(%%rbp)\n");
+						fprintf(file, "\tmovl\t_%s(%%rip), %%eax\n", tac->op1->text);
+						fprintf(file, "\tcmpl\t_%s(%%rip), %%eax\n", tac->op2->text);
+						fprintf(file, "\tjl\tLBB0_%d\n", labc);
+					break;
+				}
 				break;	
 			
 			case TAC_EQ: // 12
 				//fprintf(stderr, "TAC_EQ");
+				switch(loop)
+				{
+					case 1:
+						fprintf(file, "\tmovl\t$0, -4(%%rbp)\n");
+						fprintf(file, "\tmovl\t_%s(%%rip), %%eax\n", tac->op1->text);
+						fprintf(file, "\tcmpl\t_%s(%%rip), %%eax\n", tac->op2->text);
+						fprintf(file, "\tjne\tLBB0_%d\n", labc);
+					break;
+				}
 				break;	
 			
 			case TAC_NE: // 13
 				//fprintf(stderr, "TAC_NE");
+				switch(loop)
+				{
+					case 1:
+						fprintf(file, "\tmovl\t$0, -4(%%rbp)\n");
+						fprintf(file, "\tmovl\t_%s(%%rip), %%eax\n", tac->op1->text);
+						fprintf(file, "\tcmpl\t_%s(%%rip), %%eax\n", tac->op2->text);
+						fprintf(file, "\tje\tLBB0_%d\n", labc);
+					break;
+				}
 				break;
 
 			case TAC_AND: // 14
@@ -311,9 +365,9 @@ void asmGenerate(char* filename, TAC* tac)
 				switch(loop)
 				{
 					case 1:
-						fprintf(file, "\tmovl\t$0,\t-4(%%rbp)\n");
-						fprintf(file, "\tcmpl\t$0,\t_%s(%%rip)\n", tac->op1->text);
-						fprintf(file, "\tje\tLBB0_%d\n",labc);
+						//fprintf(file, "\tmovl\t$0,\t-4(%%rbp)\n");
+						//fprintf(file, "\tcmpl\t$0,\t_%s(%%rip)\n", tac->op1->text);
+						//fprintf(file, "\tje\tLBB0_%d\n",labc);
 						fprintf(file, "## BB#%d\n",bbc);
 						bbc++;
 						//labc++;
