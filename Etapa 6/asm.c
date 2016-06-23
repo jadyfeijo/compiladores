@@ -53,7 +53,7 @@ void asmGenerate(char* filename, TAC* tac)
 						labc++;
 						break;
 //jmp	LBB0_2
-//LBB0_2:
+					default: break;	
 				}
 				break;	
 			
@@ -249,6 +249,7 @@ void asmGenerate(char* filename, TAC* tac)
 						fprintf(file, "\tcmpl\t_%s(%%rip), %%eax\n", tac->op2->text);
 						fprintf(file, "\tjge\tLBB0_%d\n", labc);
 					break;
+					default: break;	
 				}
 				break;
 
@@ -262,6 +263,7 @@ void asmGenerate(char* filename, TAC* tac)
 						fprintf(file, "\tcmpl\t_%s(%%rip), %%eax\n", tac->op2->text);
 						fprintf(file, "\tjle\tLBB0_%d\n", labc);
 					break;
+					default: break;	
 				}
 				break;
 			
@@ -275,6 +277,7 @@ void asmGenerate(char* filename, TAC* tac)
 						fprintf(file, "\tcmpl\t_%s(%%rip), %%eax\n", tac->op2->text);
 						fprintf(file, "\tjg\tLBB0_%d\n", labc);
 					break;
+					default: break;	
 				}
 				break;	
 			
@@ -288,6 +291,7 @@ void asmGenerate(char* filename, TAC* tac)
 						fprintf(file, "\tcmpl\t_%s(%%rip), %%eax\n", tac->op2->text);
 						fprintf(file, "\tjl\tLBB0_%d\n", labc);
 					break;
+					default: break;	
 				}
 				break;	
 			
@@ -301,6 +305,7 @@ void asmGenerate(char* filename, TAC* tac)
 						fprintf(file, "\tcmpl\t_%s(%%rip), %%eax\n", tac->op2->text);
 						fprintf(file, "\tjne\tLBB0_%d\n", labc);
 					break;
+					default: break;	
 				}
 				break;	
 			
@@ -314,6 +319,7 @@ void asmGenerate(char* filename, TAC* tac)
 						fprintf(file, "\tcmpl\t_%s(%%rip), %%eax\n", tac->op2->text);
 						fprintf(file, "\tje\tLBB0_%d\n", labc);
 					break;
+					default: break;	
 				}
 				break;
 
@@ -332,6 +338,7 @@ void asmGenerate(char* filename, TAC* tac)
 						//fprintf(file, "## BB#%d:\n", bbc);
 						//bbc++;
 					break;
+					default: break;	
 				}
 				break;
 
@@ -350,6 +357,7 @@ void asmGenerate(char* filename, TAC* tac)
 						//fprintf(file, "## BB#%d:\n", bbc);
 						//bbc++;
 					break;
+					default: break;	
 				}
 				break;
 
@@ -425,6 +433,7 @@ void asmGenerate(char* filename, TAC* tac)
 					case 1:
 						fprintf(file, "\tjmp\tLBB0_%d\n", labc-1);
 						break;
+					default: break;	
 				}
 				break;	
 			
@@ -458,6 +467,17 @@ void asmGenerate(char* filename, TAC* tac)
 				break;
 			case TAC_PRINT: // 23
 				//fprintf(stderr, "TAC_PRINT");
+				switch(loop)
+				{
+					case 1:
+					break;
+					case 2:
+					break;
+					case 3:
+						fprintf(file, "\t.section	__TEXT,__cstring,cstring_literals\n");
+						//fazer laco pra printar os L_.str firstPrint vezes
+					break;
+				}
 			
 				break;
 			case TAC_READ: // 24
@@ -477,6 +497,7 @@ void asmGenerate(char* filename, TAC* tac)
 							fprintf(file, "\tmovl\t%%ecx, _%s(%%rip)\n", tac->res->text);
 						}
 						break;
+					default: break;	
 				}
 				
 				break;
@@ -519,7 +540,7 @@ void asmGenerate(char* filename, TAC* tac)
                     case 1:
                         fprintf(file, "\tcallq	_%s\n", tac->res->text);
                         break;
-                        
+                    default: break;	    
                 }
 
 		        break;
@@ -542,7 +563,7 @@ void asmGenerate(char* filename, TAC* tac)
 	}
 	//fprintf(file, "\n");
 	fclose(file);
-	if(loop < 2)
+	if(loop < 3)
 	{	
 		loop++;
 		asmGenerate(filename, tac0);
