@@ -5,6 +5,8 @@
 
 int loop = 0;
 int firstPrint = 0;
+int printc = 0;
+
 int firstVar = 0;
 
 //counters for lables
@@ -472,29 +474,39 @@ void asmGenerate(char* filename, TAC* tac)
                     case 1:
                         
                             fprintf(file, "\tsubq	$16, %%rsp\n");
-                            if (!firstPrint) {
+                            if (!printc) {
                                 fprintf(file, "\tleaq	L_.str(%%rip), %rdi\n");
-                                firstPrint++;
+                                printc++;
                             }
                             else {
-                                fprintf(file, "\tleaq	L_.str.%d(%rip), %rdi" , firstprint);
-                                firstprint++;
+                                fprintf(file, "\tleaq	L_.str.%d(%rip), %rdi" , printc);
+                                printc++;
                             }
                             fprintf(file, "\tmovb	$0, %%al\n");
                             fprintf(file, "\tcallq	_printf\n");
                             fprintf(file, "\tmovl	%%eax, -4(%%rbp)          ## 4-byte Spill\n");
-                            fprintf(file, "\tmovl	%ecx, %eax\n");
-                            fprintf(file, "\taddq	$16, %rsp\n");
+                            fprintf(file, "\tmovl	%%ecx, %%eax\n");
+                            fprintf(file, "\taddq	$16, %%rsp\n");
                             break;
                     case 2:
                         break;
                     case 3:
-                        fprintf(file, "\t.section	__TEXT,__cstring,cstring_literals\n");
-                        //fazer laco pra printar os L_.str firstPrint vezes
+                        if(!firstPrint)
+                        {
+                            fprintf(file, "\t.section	__TEXT,__cstring,cstring_literals\n");
+                            firstPrint++;
+                            fprintf(file, "L_.str:                                 ## @.str\n\t.asciz	\"%s\"",tac->res->text);
+                        }
+                        else
+                        {
+                            fprintf(file, "L_.str%d:                                 ## @.str\n\t.asciz	\"%s\"",firstPrint, tac->res->text);
+                            firstPrint++;
+                        }
                         break;
 
                     default: break;	
                 }
+
 				break;
 			case TAC_READ: // 24
 				//fprintf(stderr, "TAC_READ");

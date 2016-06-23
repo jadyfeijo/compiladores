@@ -1,5 +1,4 @@
-int a:0;
+
 int main() {
-    a=func()
+	output "eu amo compiladores"   
 };
-int func();;

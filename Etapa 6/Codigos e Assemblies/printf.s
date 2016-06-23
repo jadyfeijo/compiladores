@@ -17,12 +17,8 @@ Ltmp2:
 	leaq	L_.str(%rip), %rdi
 	movb	$0, %al
 	callq	_printf
-	leaq	L_.str.1(%rip), %rdi
-	movl	%eax, -4(%rbp)          ## 4-byte Spill
-	movb	$0, %al
-	callq	_printf
 	xorl	%ecx, %ecx
-	movl	%eax, -8(%rbp)          ## 4-byte Spill
+	movl	%eax, -4(%rbp)          ## 4-byte Spill
 	movl	%ecx, %eax
 	addq	$16, %rsp
 	popq	%rbp
@@ -32,9 +28,6 @@ Ltmp2:
 	.section	__TEXT,__cstring,cstring_literals
 L_.str:                                 ## @.str
 	.asciz	"eu amo compiladores"
-
-L_.str.1:                               ## @.str.1
-	.asciz	"ferias please"
 
 
 .subsections_via_symbols
