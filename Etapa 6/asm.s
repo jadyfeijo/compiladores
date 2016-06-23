@@ -2,20 +2,9 @@
 	.macosx_version_min 10, 11
 
 
-	.section	__DATA,__data
-	.globl	_a
-	.align	2
-_a:
-	.long	0
-
-	.globl	_c
-	.align	2
-_c:
-	.byte	0
-
-	.globl	_voidfunc
+	.globl	_main
 	.align	4, 0x90
-_voidfunc:
+_main:
 	.cfi_startproc
 ## BB#0:
 	pushq	%rbp
@@ -27,6 +16,21 @@ Ltmp1:
 Ltmp2:
 	.cfi_def_cfa_register %rbp
 	xorl	%eax, %eax
+	movl	_a(%rip), %ecx
+	addl	_2(%rip), %ecx
+	movl	%ecx, _TempVAR0(%rip)
 	popq	%rbp
 	retq
 	.cfi_endproc
+
+
+	.section	__DATA,__data
+	.globl	_a
+	.align	2
+_a:
+	.long	0
+
+	.globl	_c
+	.align	2
+_c:
+	.byte	0
