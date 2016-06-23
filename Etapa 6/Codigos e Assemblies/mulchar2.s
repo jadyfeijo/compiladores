@@ -14,24 +14,28 @@ Ltmp1:
 Ltmp2:
 	.cfi_def_cfa_register %rbp
 	xorl	%eax, %eax
-	movsbl	_b(%rip), %ecx
-	movsbl	_c(%rip), %edx
-	addl	%edx, %ecx
-	movl	%ecx, _a(%rip)
+	movl	_a(%rip), %ecx
+	movsbl	_b(%rip), %edx
+	imull	%edx, %ecx
+	movl	%ecx, _c(%rip)
 	popq	%rbp
 	retq
 	.cfi_endproc
 
-	.globl	_a                      ## @a
-.zerofill __DATA,__common,_a,4,2
 	.section	__DATA,__data
 	.globl	_b                      ## @b
 _b:
-	.byte	5                       ## 0x5
+	.byte	53                      ## 0x35
+
+	.globl	_a                      ## @a
+	.align	2
+_a:
+	.long	54                      ## 0x36
 
 	.globl	_c                      ## @c
+	.align	2
 _c:
-	.byte	7                       ## 0x7
+	.long	48                      ## 0x30
 
 
 .subsections_via_symbols

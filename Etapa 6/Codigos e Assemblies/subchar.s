@@ -17,8 +17,7 @@ Ltmp2:
 	movsbl	_a(%rip), %ecx
 	movsbl	_b(%rip), %edx
 	subl	%edx, %ecx
-	movb	%cl, %sil
-	movb	%sil, _c(%rip)
+	movl	%ecx, _c(%rip)
 	popq	%rbp
 	retq
 	.cfi_endproc
@@ -33,8 +32,9 @@ _a:
 	.byte	54                      ## 0x36
 
 	.globl	_c                      ## @c
+	.align	2
 _c:
-	.byte	48                      ## 0x30
+	.long	48                      ## 0x30
 
 
 .subsections_via_symbols

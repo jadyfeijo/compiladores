@@ -33,5 +33,10 @@ _b:
 _c:
 	.byte	7                       ## 0x7
 
+	.globl	_d                      ## @d
+	.align	2
+_d:
+	.long	7                       ## 0x7
+
 
 .subsections_via_symbols

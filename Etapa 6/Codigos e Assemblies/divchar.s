@@ -22,8 +22,7 @@ Ltmp2:
 	cltd
 	movl	-8(%rbp), %ecx          ## 4-byte Reload
 	idivl	%ecx
-	movb	%al, %sil
-	movb	%sil, _c(%rip)
+	movl	%eax, _c(%rip)
 	movl	-4(%rbp), %eax          ## 4-byte Reload
 	popq	%rbp
 	retq
@@ -39,8 +38,9 @@ _a:
 	.byte	54                      ## 0x36
 
 	.globl	_c                      ## @c
+	.align	2
 _c:
-	.byte	48                      ## 0x30
+	.long	48                      ## 0x30
 
 
 .subsections_via_symbols
