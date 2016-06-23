@@ -429,8 +429,8 @@ void asmGenerate(char* filename, TAC* tac)
 				break;	
 			
 			case TAC_CALL: // 20
-				//fprintf(stderr, "TAC_CALL");
-				break;
+                //fprintf(stderr, "TAC_CALL");
+                break;
 
 			case TAC_ARG: // 21
 				//fprintf(stderr, "TAC_ARG");
@@ -511,7 +511,15 @@ void asmGenerate(char* filename, TAC* tac)
 				break;
 		        
 		    case TAC_FUNCALL: // 30
-		        //fprintf(stderr, "TAC_FUNCALL");
+		        
+                switch(loop)
+                {
+                    case 1:
+                        fprintf(file, "\tcallq	_%s\n", tac->res->text);
+                        break;
+                        
+                }
+
 		        break;
 		  
 		    case TAC_FUNDEC_PARAM: // 31
