@@ -94,8 +94,29 @@ void asmGenerate(char* filename, TAC* tac)
                 break;
 			
 			case TAC_SUB: // 5
-				//fprintf(stderr, "TAC_SUB");
-				break;	
+                switch(loop)
+                {
+                    case 1:
+                        if(tac->res->dataType == DATATYPE_INT)
+                            
+                        {
+                            fprintf(file, "\tmovl	_%s(%%rip), %%ecx\n", tac->op1->text);
+                            fprintf(file, "\tsubl	_%s(%%rip), %%ecx\n", tac->op2->text);
+                            fprintf(file, "\tmovl	%%ecx, _%s(%%rip)\n", tac->res->text);
+                            
+                        }
+                        if(tac->res->dataType == DATATYPE_CHAR)
+                        {
+                            fprintf(file, "\tmovsbl	_%s(%%rip), %%ecx\n", tac->op1->text);
+                            fprintf(file, "\tmovsbl	_%s(%%rip), %%edx\n", tac->op2->text);
+                            fprintf(file, "\tsubl	%%edx, %%ecx\n");
+                            fprintf(file, "\tmovb	%%cl, %%sil\n");
+                            fprintf(file, "\tmovb	%%sil, _%s(%%rip)\n", tac->res->text);
+                        }
+                        break;
+                    default: break;
+                }
+                break;
 		
 			case TAC_MUL: // 6
                 switch(loop)
