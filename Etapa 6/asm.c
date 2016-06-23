@@ -49,7 +49,7 @@ void asmGenerate(char* filename, TAC* tac)
 				{
 					case 1:
 						//fprintf(file, "\tjmp LBB0_%d\n",labc);
-						fprintf(file, "LBB0_%d\n",labc);
+						fprintf(file, "LBB0_%d:\n",labc);
 						labc++;
 						break;
 //jmp	LBB0_2
@@ -458,14 +458,25 @@ void asmGenerate(char* filename, TAC* tac)
 				break;
 			case TAC_PRINT: // 23
 				//fprintf(stderr, "TAC_PRINT");
-				break;
 			
+				break;
 			case TAC_READ: // 24
 				//fprintf(stderr, "TAC_READ");
 				break;	
 
 			case TAC_ASS: // 25
 				//fprintf(stderr, "TAC_ASS");
+				switch(loop)
+				{
+					case 1:
+						if(tac->op1->type == 301)
+							fprintf(file, "\tmovl\t$%s, _%s(%%rip)\n", tac->op1->text, tac->res->text); 
+						if(tac->op1->type == 307)
+							fprintf(file, "\tmovl\t_%s(%%rip), %%ecx\n", tac->op1->text);
+							fprintf(file, "\tmovl\t%%ecx, _%s(%%rip)\n", tac->res->text);
+						break;
+				}
+				
 				break;
 
 			case TAC_VARDEC: // 26

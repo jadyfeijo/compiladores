@@ -4,7 +4,6 @@ int c:7;
 
 int main()
 {
-	if(a || b) a = b+c
-	
+	a = 3
 	
 };

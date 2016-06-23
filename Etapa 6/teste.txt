@@ -1,0 +1,20 @@
+int a:0;
+int b:1;
+int c:10;
+int d:20;
+
+int main()
+{
+	a = a+b
+
+	if(a < c) a = c - b
+
+	while(a <= d)
+	{
+		a = a + b
+	}
+
+	return a
+};
+
+int func();;

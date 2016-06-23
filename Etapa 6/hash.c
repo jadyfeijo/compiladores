@@ -110,9 +110,10 @@ HASH_NODE *makeTemp(int type)
 	HASH_NODE* aux;
 
 	sprintf(buffer, "TempVAR%d", nextTemp++);
-	return (hashInsert(buffer, type));
-	//aux = hashInsert(buffer,type);
-	//return (hashInsert(
+	//return (hashInsert(buffer, type));
+	aux = hashInsert(buffer,type);
+	aux->type = 307;
+	return aux;
 }
 
 HASH_NODE *makeLabel(void)
