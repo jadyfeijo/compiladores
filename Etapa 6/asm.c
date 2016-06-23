@@ -234,6 +234,22 @@ void asmGenerate(char* filename, TAC* tac)
 
 			case TAC_IFZ: // 18
 				//fprintf(stderr, "TAC_IFZ");
+				switch(loop)
+				{
+					case 1:
+						fprintf(file, "\tmovl\t$0,\t-4(%%rbp)");
+						fprintf(file, "\tcmpl\t$0,\t_%s(%%rip)"tac->op1->text);
+						fprintf(file, "\tje\tLBB0_%d",);
+						fprintf(file, "## BB#%d",bbc);
+						bbc++;
+						//fprintf(file, "
+	//movl	$0,	-4(%rbp)
+	//cmpl	$0, _a(%rip)
+	//je	LBB0_2
+//## BB#1:
+	//jmp	LBB0_2
+//LBB0_2:
+				}
 				break;
 			
 			case TAC_JUMP: // 19

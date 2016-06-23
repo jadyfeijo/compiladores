@@ -2,4 +2,7 @@ int a:0;
 int b:5;
 int c:7;
 
-int main();;
+int main()
+{
+	if(a<b) return c
+};
