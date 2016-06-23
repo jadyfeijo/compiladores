@@ -458,6 +458,35 @@ void asmGenerate(char* filename, TAC* tac)
 				break;
 			case TAC_PRINT: // 23
 				//fprintf(stderr, "TAC_PRINT");
+                switch(loop)
+            {
+                case 1:
+                    
+                        fprintf(file, "\tsubq	$16, %%rsp\n");
+                        if (!firstPrint) {
+                            fprintf(file, "\tleaq	L_.str(%%rip), %rdi\n");
+                            firstPrint++;
+                        }
+                        else {
+                            fprintf(file, "\tleaq	L_.str.%d(%rip), %rdi" , firstprint);
+                            firstprint++;
+                        }
+                        fprintf(file, "\tmovb	$0, %%al\n");
+                        fprintf(file, "\tcallq	_printf\n");
+                        fprintf(file, "\tmovl	%%eax, -4(%%rbp)          ## 4-byte Spill\n");
+                        fprintf(file, "\tmovl	%ecx, %eax\n");
+                        fprintf(file, "\taddq	$16, %rsp\n");
+                        break;
+                default: break;	
+            }
+                subq	$16, %rsp
+                leaq	L_.str(%rip), %rdi
+                movb	$0, %al
+                callq	_printf
+                xorl	%ecx, %ecx
+                movl	%eax, -4(%rbp)          ## 4-byte Spill
+                movl	%ecx, %eax
+                addq	$16, %rsp
 			
 				break;
 			case TAC_READ: // 24
