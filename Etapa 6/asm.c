@@ -288,7 +288,13 @@ void asmGenerate(char* filename, TAC* tac)
 				break;
 			
 			case TAC_JUMP: // 19
-				//fprintf(stderr, "TAC_JUMP");
+				//fprintf(stderr, "TAC_JUMP"); fprintf(file, "\tmovl\t-4(%%rbp), %%eax");
+				switch(loop)
+				{
+					case 1:
+						fprintf(file, "\tjmp\tLBB0_%d\n", labc-1);
+						break;
+				}
 				break;	
 			
 			case TAC_CALL: // 20

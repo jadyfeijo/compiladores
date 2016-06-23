@@ -107,9 +107,12 @@ HASH_NODE *makeTemp(int type)
 {
 	static int nextTemp = 0;
 	static char buffer[256];
+	HASH_NODE* aux;
 
 	sprintf(buffer, "TempVAR%d", nextTemp++);
 	return (hashInsert(buffer, type));
+	//aux = hashInsert(buffer,type);
+	//return (hashInsert(
 }
 
 HASH_NODE *makeLabel(void)

@@ -13,14 +13,13 @@ Ltmp1:
 	movq	%rsp, %rbp
 Ltmp2:
 	.cfi_def_cfa_register %rbp
-
 	movl	$0, -4(%rbp)
 	cmpl	$0, _a(%rip)
 	je	LBB0_2
 ## BB#1:
 	jmp	LBB0_2
 LBB0_2:
-	movl	-4(%rbp), %eax // ???
+	movl	-4(%rbp), %eax // ??? jump
 	popq	%rbp
 	retq
 	.cfi_endproc
