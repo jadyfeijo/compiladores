@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int first = 0;
+int loop = 0;
 int firstPrint = 0;
 int firstVar = 0;
 
@@ -18,19 +18,19 @@ int bbc = 0;
 
 void asmGenerate(char* filename, TAC* tac)
 {
-
+	TAC* tac0 = tac;
 	FILE* file;
 	
 	if(!filename)
 		return;
 		
-	if(!(file = fopen(filename, "w")))
+	if(!(file = fopen(filename, "a")))
 		exit(5); // output file error
 
-	if(!first)	
+	if(loop == 0)	
 	{
-		fprintf(file, "\t.section\t__TEXT,__text,regular,pure_instructions\n\t.macosx_version_min 10, 11\n");
-		first = 1;
+		fprintf(file, "\t.section\t__TEXT,__text,regular,pure_instructions\n\t.macosx_version_min 10, 11\n\n");
+		loop = 1;
 	}
 
 	// generate asm code
@@ -48,39 +48,50 @@ void asmGenerate(char* filename, TAC* tac)
 				break;	
 			
 			case TAC_MOVE: // 3
-				
-				if(tac->res->dataType == DATATYPE_INT)
+				switch(loop)
 				{
-					intc++;
-					fprintf(file, "movl	$%s, -%d(%rbp)\n", tac->res->text, (4*intc)+charc);
+					case 1:
+						if(tac->res->dataType == DATATYPE_INT)
+						{
+							intc++;
+							fprintf(file, "movl	$%s, -%d(%%rbp)\n", tac->res->text, (4*intc)+charc);
 					
-				}
-				if(tac->res->dataType == DATATYPE_CHAR)
-				{
-						charc++;
-						fprintf(file, "movb	$%s, -%d(%rbp)\n", tac->res->text, (4*intc)+charc);
+						}
+						if(tac->res->dataType == DATATYPE_CHAR)
+						{
+								charc++;
+								fprintf(file, "movb	$%s, -%d(%%rbp)\n", tac->res->text, (4*intc)+charc);
+						}
+						break;
+					default: break;
 				}
 				break;
 			
 			case TAC_ADD: // 4
-                if(tac->res->dataType == DATATYPE_INT)
-            
-                {
-                    printf ("allalaalalalal %s", tac->res->dataType);
-                    fprintf(file, "\tmovl	_%s(%%rip), %%ecx\n", tac->op1->text);
-                    fprintf(file, "\taddl	_%s(%%rip), %%ecx\n", tac->op2->text);
-                    fprintf(file, "\tmovl	%%ecx, _%s(%%rip)\n", tac->res->text);
-
-                }
-                if(tac->res->dataType == DATATYPE_CHAR)
-                {
-                    fprintf(file, "\tmovsbl	_%s(%%rip), %%ecx\n", tac->op1->text);
-                    fprintf(file, "\tmovsbl	_%s(%%rip), %%edx\n", tac->op2->text);
-                    fprintf(file, "\taddl	%%edx, %%ecx\n");
-                    fprintf(file, "\tmovb	%%cl, %%sil\n");
-                    fprintf(file, "\tmovb	%%sil, _%s(%%rip)\n", tac->res->text);
-                }
-				break;
+				switch(loop)
+				{
+					case 1:
+                        if(tac->res->dataType == DATATYPE_INT)
+                            
+                        {
+                            printf ("allalaalalalal %s", tac->res->dataType);
+                            fprintf(file, "\tmovl	_%s(%%rip), %%ecx\n", tac->op1->text);
+                            fprintf(file, "\taddl	_%s(%%rip), %%ecx\n", tac->op2->text);
+                            fprintf(file, "\tmovl	%%ecx, _%s(%%rip)\n", tac->res->text);
+                            
+                        }
+                        if(tac->res->dataType == DATATYPE_CHAR)
+                        {
+                            fprintf(file, "\tmovsbl	_%s(%%rip), %%ecx\n", tac->op1->text);
+                            fprintf(file, "\tmovsbl	_%s(%%rip), %%edx\n", tac->op2->text);
+                            fprintf(file, "\taddl	%%edx, %%ecx\n");
+                            fprintf(file, "\tmovb	%%cl, %%sil\n");
+                            fprintf(file, "\tmovb	%%sil, _%s(%%rip)\n", tac->res->text);
+                        }
+                        break;
+					default: break;
+				}
+                break;
 			
 			case TAC_SUB: // 5
 				//fprintf(stderr, "TAC_SUB");
@@ -177,32 +188,44 @@ void asmGenerate(char* filename, TAC* tac)
 				break;
 
 			case TAC_BEGINFUN: // 16
-				bbc = 0;
-				fprintf(file, "\n\t.globl\t_%s\n", tac->res->text);
-				fprintf(file, "\t.align\t4, 0x90\n");
-				fprintf(file, "_%s:\n", tac->res->text);       // \t\t\t\t\t\t\t\t## @_%s                           
-				fprintf(file, "\t.cfi_startproc\n");
-				fprintf(file, "## BB#%d:\n", bbc);
-				fprintf(file, "\tpushq\t%rbp\n");
-				fprintf(file, "Ltmp%d:\n", ltmpc);
-				fprintf(file, "\t.cfi_def_cfa_offset 16\n");
-				fprintf(file, "Ltmp%d:\n", ltmpc+1);
-				fprintf(file, "\t.cfi_offset %rbp, -16\n");
-				fprintf(file, "\tmovq\t%rsp, %rbp\n");
-				fprintf(file, "Ltmp%d:\n", ltmpc+2);
-				fprintf(file, "\t.cfi_def_cfa_register %rbp\n");
-				fprintf(file, "\txorl\t%%eax, %%eax\n");
-				//fprintf(file, "\tpopq\t%rbp\n");
-				//fprintf(file, "\tretq\n");
-				ltmpc = ltmpc + 3;
-				bbc++;
+				switch(loop)
+				{
+					case 1:
+						bbc = 0;
+						fprintf(file, "\n\t.globl\t_%s\n", tac->res->text);
+						fprintf(file, "\t.align\t4, 0x90\n");
+						fprintf(file, "_%s:\n", tac->res->text);       // \t\t\t\t\t\t\t\t## @_%s                           
+						fprintf(file, "\t.cfi_startproc\n");
+						fprintf(file, "## BB#%d:\n", bbc);
+						fprintf(file, "\tpushq\t%%rbp\n");
+						fprintf(file, "Ltmp%d:\n", ltmpc);
+						fprintf(file, "\t.cfi_def_cfa_offset 16\n");
+						fprintf(file, "Ltmp%d:\n", ltmpc+1);
+						fprintf(file, "\t.cfi_offset %%rbp, -16\n");
+						fprintf(file, "\tmovq\t%%rsp, %%rbp\n");
+						fprintf(file, "Ltmp%d:\n", ltmpc+2);
+						fprintf(file, "\t.cfi_def_cfa_register %%rbp\n");
+						fprintf(file, "\txorl\t%%eax, %%eax\n");
+						//fprintf(file, "\tpopq\t%rbp\n");
+						//fprintf(file, "\tretq\n");
+						ltmpc = ltmpc + 3;
+						bbc++;
+						break;
+					default: break;
+				} 
 				break;
 			
 			case TAC_ENDFUN: // 17
 				//fprintf(stderr, "TAC_ENDFUN");
-				fprintf(file, "\tpopq\t%rbp\n");
-				fprintf(file, "\tretq\n");
-				fprintf(file, "\t.cfi_endproc\n");
+				switch(loop)
+				{
+					case 1:
+						fprintf(file, "\tpopq\t%%rbp\n");
+						fprintf(file, "\tretq\n");
+						fprintf(file, "\t.cfi_endproc\n");
+						break;
+					default: break;
+				}
 				break;
 
 			case TAC_IFZ: // 18
@@ -223,19 +246,24 @@ void asmGenerate(char* filename, TAC* tac)
 			
 			case TAC_RET: // 22
 				//fprintf(stderr, "TAC_RET");
-				if(tac->res->dataType == DATATYPE_INT) // aparentemente o return nada mais eh do qum move para o rbp, e a funcao poppa ele pra q, que entao realiza retq
+				switch(loop)
 				{
-					intc++;
-					fprintf(file, "\tmovl	$%s, -%d(%rbp)\n", tac->res->text, (4*intc)+charc);
+					case 1:
+						if(tac->res->dataType == DATATYPE_INT) // aparentemente o return nada mais eh do qum move para o rbp, e a funcao poppa ele pra q, que entao realiza retq
+						{
+							intc++;
+							fprintf(file, "\tmovl	$%s, -%d(%%rbp)\n", tac->res->text, (4*intc)+charc);
 					
+						}
+						if(tac->res->dataType == DATATYPE_CHAR)
+						{
+								charc++;
+								fprintf(file, "\tmovb	$%s, -%d(%%rbp)\n", tac->res->text, (4*intc)+charc);
+						}
+						break;
+					default: break;	
 				}
-				if(tac->res->dataType == DATATYPE_CHAR)
-				{
-						charc++;
-						fprintf(file, "\tmovb	$%s, -%d(%rbp)\n", tac->res->text, (4*intc)+charc);
-				}
-				break;	
-			
+				break;
 			case TAC_PRINT: // 23
 				//fprintf(stderr, "TAC_PRINT");
 				break;
@@ -250,16 +278,22 @@ void asmGenerate(char* filename, TAC* tac)
 
 			case TAC_VARDEC: // 26
 				//fprintf(stderr, "TAC_VARDEC");
-				if(!firstVar)
+				switch(loop)
 				{
-					fprintf(file, "\n\n\t.section\t__DATA,__data");
-					firstVar = 1;
+					case 1: break;
+					case 2:
+						if(!firstVar)
+						{
+							fprintf(file, "\n\n\t.section\t__DATA,__data");
+							firstVar = 1;
+						}
+						if(tac->res->dataType == DATATYPE_INT)
+							fprintf(file, "\n\t.globl\t_%s\n\t.align\t2\n_%s:\n\t.long\t%s\n", tac->res->text, tac->res->text, tac->next->op1->text);
+						if(tac->res->dataType == DATATYPE_CHAR)
+							fprintf(file, "\n\t.globl\t_%s\n\t.align\t2\n_%s:\n\t.byte\t%s\n", tac->res->text, tac->res->text, tac->next->op1->text);
+						break;
+					default: break;
 				}
-				if(tac->res->dataType == DATATYPE_INT)
-					fprintf(file, "\n\t.globl\t_%s\n\t.align\t2\n_%s:\n\t.long\t%s\n", tac->res->text, tac->res->text, tac->next->op1->text);
-				if(tac->res->dataType == DATATYPE_CHAR)
-					fprintf(file, "\n\t.globl\t_%s\n\t.align\t2\n_%s:\n\t.byte\t%s\n", tac->res->text, tac->res->text, tac->next->op1->text);
-				break;
 
 			case TAC_VECDEC: // 27
 				//fprintf(stderr, "TAC_VECDEC");
@@ -292,6 +326,13 @@ void asmGenerate(char* filename, TAC* tac)
 		    default: break;
 				//fprintf(stderr, "TAC_DEFAULT");			
 		}
+	}
+	//fprintf(file, "\n");
+	fclose(file);
+	if(loop < 2)
+	{	
+		loop++;
+		asmGenerate(filename, tac0);
 	}
 }
 
