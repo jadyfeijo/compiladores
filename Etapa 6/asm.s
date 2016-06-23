@@ -8,25 +8,38 @@
 _a:
 	.long	0
 
+	.globl	_b
+	.align	2
+_b:
+	.long	5
+
 	.globl	_c
 	.align	2
 _c:
-	.byte	0
+	.long	7
 
-	.globl	_voidfunc
+	.globl	_d
+	.align	2
+_d:
+	.long	7
+
+	.globl	_main
 	.align	4, 0x90
-_voidfunc:
+_main:
 	.cfi_startproc
 ## BB#0:
-	pushq	%rbp
+	pushq	rbp
 Ltmp0:
 	.cfi_def_cfa_offset 16
 Ltmp1:
-	.cfi_offset %rbp, -16
-	movq	%rsp, %rbp
+	.cfi_offset rbp, -16
+	movq	rsp, rbp
 Ltmp2:
-	.cfi_def_cfa_register %rbp
+	.cfi_def_cfa_register rbp
 	xorl	%eax, %eax
-	popq	%rbp
+	movl	_b(%rip), %ecx
+	addl	_c(%rip), %ecx
+	movl	%ecx, _TempVAR0(%rip)
+	popq	rbp
 	retq
 	.cfi_endproc

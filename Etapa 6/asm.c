@@ -64,15 +64,21 @@ void asmGenerate(char* filename, TAC* tac)
 			
 			case TAC_ADD: // 4
                 if(tac->res->dataType == DATATYPE_INT)
+            
                 {
-                    intc++;
-                    fprintf(file, "movl	$%s, -%d(%rbp)\n", tac->res->text, (4*intc)+charc);
-                    
+                    printf ("allalaalalalal %s", tac->res->dataType);
+                    fprintf(file, "\tmovl	_%s(%%rip), %%ecx\n", tac->op1->text);
+                    fprintf(file, "\taddl	_%s(%%rip), %%ecx\n", tac->op2->text);
+                    fprintf(file, "\tmovl	%%ecx, _%s(%%rip)\n", tac->res->text);
+
                 }
                 if(tac->res->dataType == DATATYPE_CHAR)
                 {
-                    charc++;
-                    fprintf(file, "movb	$%s, -%d(%rbp)\n", tac->res->text, (4*intc)+charc);
+                    fprintf(file, "\tmovsbl	_%s(%%rip), %%ecx\n", tac->op1->text);
+                    fprintf(file, "\tmovsbl	_%s(%%rip), %%edx\n", tac->op2->text);
+                    fprintf(file, "\taddl	%%edx, %%ecx\n");
+                    fprintf(file, "\tmovb	%%cl, %%sil\n");
+                    fprintf(file, "\tmovb	%%sil, _%s(%%rip)\n", tac->res->text);
                 }
 				break;
 			
@@ -81,11 +87,61 @@ void asmGenerate(char* filename, TAC* tac)
 				break;	
 		
 			case TAC_MUL: // 6
-				//fprintf(stderr, "TAC_MUL");
+                if(tac->res->dataType == DATATYPE_INT)
+                    
+                {
+                    printf ("allalaalalalal %s", tac->res->dataType);
+                    fprintf(file, "\tmovl	_%s(%%rip), %%ecx\n", tac->op1->text);
+                    fprintf(file, "\timull	_%s(%%rip), %%ecx\n", tac->op2->text);
+                    fprintf(file, "\tmovl	%%ecx, _%s(%%rip)\n", tac->res->text);
+                    
+                }
+                if(tac->res->dataType == DATATYPE_CHAR)
+                {
+                    fprintf(file, "\tmovsbl	_%s(%%rip), %%ecx\n", tac->op1->text);
+                    fprintf(file, "\tmovsbl	_%s(%%rip), %%edx\n", tac->op2->text);
+                    fprintf(file, "\timull	%%edx, %%ecx\n");
+                    fprintf(file, "\tmovb	%%cl, %%sil\n");
+                    fprintf(file, "\tmovb	%%sil, _%s(%%rip)\n", tac->res->text);
+                }
 				break;
 			
 			case TAC_DIV: // 7
-				//fprintf(stderr, "TAC_DIV");
+                if(tac->res->dataType == DATATYPE_INT)
+                    
+                {
+                    fprintf(file, "\tmovl	_%s(%%rip), %%ecx\n", tac->op1->text);
+                    fprintf(file, "\tmovl	%%eax, -4(%%rbp)          ## 4-byte Spill\n");
+                    fprintf(file, "\tmovl	%%ecx, %%eax\n");
+                    fprintf(file, "\tcltd\n");
+                    fprintf(file, "idivl	_%s(%%rip)\n",tac->op2->text);
+                    fprintf(file, "\tmovl	%%eax, _%s(%%rip)\n", tac->res->text);
+                    fprintf(file, "\tmovl	-4(%%rbp), %%eax          ## 4-byte Reload\n");
+                    
+                }
+                if(tac->res->dataType == DATATYPE_CHAR)
+                {
+                    fprintf(file, "\tmovl	_%s(%%rip), %%ecx\n", tac->op1->text);
+                    fprintf(file, "\tmovl	_%s(%%rip), %%edx\n", tac->op2->text);
+                    fprintf(file, "\tmovl	%%eax, -4(%%rbp)          ## 4-byte Spill\n");
+                    fprintf(file, "\tmovl	%%ecx, %%eax\n");
+                    fprintf(file, "\tmovl	%%edx, -8(%%rbp)          ## 4-byte Spill\n");
+                    fprintf(file, "\tcltd\n");
+                    fprintf(file, "\tmovl	-8(%%rbp), %%ecx          ## 4-byte Reload\n");
+                    fprintf(file, "\tidivl  %%ecx\n");
+                    fprintf(file, "\tmovb   %%al, %%sil\n");
+                    fprintf(file, "\tmovl	%%sil, _%s(%%rip)\n", tac->res->text);
+                    fprintf(file, "\tmovl	-4(%%rbp), %%eax          ## 4-byte Reload\n");
+                }
+
+                movl	_a(%rip), %ecx
+                movl	%eax, -4(%rbp)          ## 4-byte Spill
+                movl	%ecx, %eax
+                cltd
+                idivl	_b(%rip)
+                movl	%eax, _c(%rip)
+                movl	-4(%rbp), %eax          ## 4-byte Reload
+
 				break;
 			
 			case TAC_LESS: // 8
