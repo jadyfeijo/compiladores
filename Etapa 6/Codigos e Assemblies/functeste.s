@@ -13,7 +13,7 @@ Ltmp1:
 	movq	%rsp, %rbp
 Ltmp2:
 	.cfi_def_cfa_register %rbp
-	movl	$7, %eax
+	movl	-4(%rbp), %eax
 	popq	%rbp
 	retq
 	.cfi_endproc
@@ -31,10 +31,15 @@ Ltmp4:
 	movq	%rsp, %rbp
 Ltmp5:
 	.cfi_def_cfa_register %rbp
-	xorl	%eax, %eax
+	callq	_func
+	xorl	%ecx, %ecx
+	movl	%eax, _a(%rip)
+	movl	%ecx, %eax
 	popq	%rbp
 	retq
 	.cfi_endproc
 
+	.globl	_a                      ## @a
+.zerofill __DATA,__common,_a,4,2
 
 .subsections_via_symbols

@@ -13,7 +13,6 @@ Ltmp1:
 	movq	%rsp, %rbp
 Ltmp2:
 	.cfi_def_cfa_register %rbp
-	movl	$7, %eax
 	popq	%rbp
 	retq
 	.cfi_endproc
@@ -31,6 +30,7 @@ Ltmp4:
 	movq	%rsp, %rbp
 Ltmp5:
 	.cfi_def_cfa_register %rbp
+	callq	_func
 	xorl	%eax, %eax
 	popq	%rbp
 	retq

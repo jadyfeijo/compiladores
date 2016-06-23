@@ -1,8 +1,10 @@
 	.section	__TEXT,__text,regular,pure_instructions
 	.macosx_version_min 10, 11
-	.globl	_func
+
+
+	.globl	_main
 	.align	4, 0x90
-_func:                                  ## @func
+_main:
 	.cfi_startproc
 ## BB#0:
 	pushq	%rbp
@@ -13,14 +15,17 @@ Ltmp1:
 	movq	%rsp, %rbp
 Ltmp2:
 	.cfi_def_cfa_register %rbp
-	movl	$7, %eax
+	xorl	%eax, %eax
+	callq	_TempVAR0
+	movl	_TempVAR0(%rip), %ecx
+	movl	%ecx, _a(%rip)
 	popq	%rbp
 	retq
 	.cfi_endproc
 
-	.globl	_main
+	.globl	_func
 	.align	4, 0x90
-_main:                                  ## @main
+_func:
 	.cfi_startproc
 ## BB#0:
 	pushq	%rbp
@@ -37,4 +42,8 @@ Ltmp5:
 	.cfi_endproc
 
 
-.subsections_via_symbols
+	.section	__DATA,__data
+	.globl	_a
+	.align	2
+_a:
+	.long	0
