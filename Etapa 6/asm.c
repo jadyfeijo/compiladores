@@ -98,62 +98,66 @@ void asmGenerate(char* filename, TAC* tac)
 				break;	
 		
 			case TAC_MUL: // 6
-                if(tac->res->dataType == DATATYPE_INT)
-                    
+                switch(loop)
                 {
-                    printf ("allalaalalalal %s", tac->res->dataType);
-                    fprintf(file, "\tmovl	_%s(%%rip), %%ecx\n", tac->op1->text);
-                    fprintf(file, "\timull	_%s(%%rip), %%ecx\n", tac->op2->text);
-                    fprintf(file, "\tmovl	%%ecx, _%s(%%rip)\n", tac->res->text);
-                    
+                    case 1:
+                        if(tac->res->dataType == DATATYPE_INT)
+                            
+                        {
+                            printf ("allalaalalalal %s", tac->res->dataType);
+                            fprintf(file, "\tmovl	_%s(%%rip), %%ecx\n", tac->op1->text);
+                            fprintf(file, "\timull	_%s(%%rip), %%ecx\n", tac->op2->text);
+                            fprintf(file, "\tmovl	%%ecx, _%s(%%rip)\n", tac->res->text);
+                            
+                        }
+                        if(tac->res->dataType == DATATYPE_CHAR)
+                        {
+                            fprintf(file, "\tmovsbl	_%s(%%rip), %%ecx\n", tac->op1->text);
+                            fprintf(file, "\tmovsbl	_%s(%%rip), %%edx\n", tac->op2->text);
+                            fprintf(file, "\timull	%%edx, %%ecx\n");
+                            fprintf(file, "\tmovb	%%cl, %%sil\n");
+                            fprintf(file, "\tmovb	%%sil, _%s(%%rip)\n", tac->res->text);
+                        }
+                        break;
+                    default: break;
                 }
-                if(tac->res->dataType == DATATYPE_CHAR)
-                {
-                    fprintf(file, "\tmovsbl	_%s(%%rip), %%ecx\n", tac->op1->text);
-                    fprintf(file, "\tmovsbl	_%s(%%rip), %%edx\n", tac->op2->text);
-                    fprintf(file, "\timull	%%edx, %%ecx\n");
-                    fprintf(file, "\tmovb	%%cl, %%sil\n");
-                    fprintf(file, "\tmovb	%%sil, _%s(%%rip)\n", tac->res->text);
-                }
-				break;
+                break;
 			
 			case TAC_DIV: // 7
-                if(tac->res->dataType == DATATYPE_INT)
-                    
+                switch(loop)
                 {
-                    fprintf(file, "\tmovl	_%s(%%rip), %%ecx\n", tac->op1->text);
-                    fprintf(file, "\tmovl	%%eax, -4(%%rbp)          ## 4-byte Spill\n");
-                    fprintf(file, "\tmovl	%%ecx, %%eax\n");
-                    fprintf(file, "\tcltd\n");
-                    fprintf(file, "idivl	_%s(%%rip)\n",tac->op2->text);
-                    fprintf(file, "\tmovl	%%eax, _%s(%%rip)\n", tac->res->text);
-                    fprintf(file, "\tmovl	-4(%%rbp), %%eax          ## 4-byte Reload\n");
-                    
+                    case 1:
+                        if(tac->res->dataType == DATATYPE_INT)
+                            
+                        {
+                            fprintf(file, "\tmovl	_%s(%%rip), %%ecx\n", tac->op1->text);
+                            fprintf(file, "\tmovl	%%eax, -4(%%rbp)          ## 4-byte Spill\n");
+                            fprintf(file, "\tmovl	%%ecx, %%eax\n");
+                            fprintf(file, "\tcltd\n");
+                            fprintf(file, "idivl	_%s(%%rip)\n",tac->op2->text);
+                            fprintf(file, "\tmovl	%%eax, _%s(%%rip)\n", tac->res->text);
+                            fprintf(file, "\tmovl	-4(%%rbp), %%eax          ## 4-byte Reload\n");
+                            
+                        }
+                        if(tac->res->dataType == DATATYPE_CHAR)
+                        {
+                            fprintf(file, "\tmovl	_%s(%%rip), %%ecx\n", tac->op1->text);
+                            fprintf(file, "\tmovl	_%s(%%rip), %%edx\n", tac->op2->text);
+                            fprintf(file, "\tmovl	%%eax, -4(%%rbp)          ## 4-byte Spill\n");
+                            fprintf(file, "\tmovl	%%ecx, %%eax\n");
+                            fprintf(file, "\tmovl	%%edx, -8(%%rbp)          ## 4-byte Spill\n");
+                            fprintf(file, "\tcltd\n");
+                            fprintf(file, "\tmovl	-8(%%rbp), %%ecx          ## 4-byte Reload\n");
+                            fprintf(file, "\tidivl  %%ecx\n");
+                            fprintf(file, "\tmovb   %%al, %%sil\n");
+                            fprintf(file, "\tmovl	%%sil, _%s(%%rip)\n", tac->res->text);
+                            fprintf(file, "\tmovl	-4(%%rbp), %%eax          ## 4-byte Reload\n");
+                        }
+                        break;
+                    default: break;
                 }
-                if(tac->res->dataType == DATATYPE_CHAR)
-                {
-                    fprintf(file, "\tmovl	_%s(%%rip), %%ecx\n", tac->op1->text);
-                    fprintf(file, "\tmovl	_%s(%%rip), %%edx\n", tac->op2->text);
-                    fprintf(file, "\tmovl	%%eax, -4(%%rbp)          ## 4-byte Spill\n");
-                    fprintf(file, "\tmovl	%%ecx, %%eax\n");
-                    fprintf(file, "\tmovl	%%edx, -8(%%rbp)          ## 4-byte Spill\n");
-                    fprintf(file, "\tcltd\n");
-                    fprintf(file, "\tmovl	-8(%%rbp), %%ecx          ## 4-byte Reload\n");
-                    fprintf(file, "\tidivl  %%ecx\n");
-                    fprintf(file, "\tmovb   %%al, %%sil\n");
-                    fprintf(file, "\tmovl	%%sil, _%s(%%rip)\n", tac->res->text);
-                    fprintf(file, "\tmovl	-4(%%rbp), %%eax          ## 4-byte Reload\n");
-                }
+                break;
 
-                movl	_a(%rip), %ecx
-                movl	%eax, -4(%rbp)          ## 4-byte Spill
-                movl	%ecx, %eax
-                cltd
-                idivl	_b(%rip)
-                movl	%eax, _c(%rip)
-                movl	-4(%rbp), %eax          ## 4-byte Reload
-
-				break;
 			
 			case TAC_LESS: // 8
 				//fprintf(stderr, "TAC_LESS");
