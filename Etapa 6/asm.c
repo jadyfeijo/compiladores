@@ -495,13 +495,15 @@ void asmGenerate(char* filename, TAC* tac)
                         {
                             fprintf(file, "\t.section	__TEXT,__cstring,cstring_literals\n");
                             firstPrint++;
-                            fprintf(file, "L_.str:                                 ## @.str\n\t.asciz	\"%s\"",tac->res->text);
+                            fprintf(file, "L_.str:                                 ## @.str\n\t.asciz	%s",tac->res->text);
                         }
                         else
                         {
-                            fprintf(file, "L_.str%d:                                 ## @.str\n\t.asciz	\"%s\"",firstPrint, tac->res->text);
+                            fprintf(file, "L_.str%d:                                 ## @.str\n\t.asciz	%s",firstPrint, tac->res->text);
                             firstPrint++;
                         }
+                        if( (printc - firstPrint) == 0)
+                            fprintf(file, "\n\n\n.subsections_via_symbols\n");
                         break;
 
                     default: break;	
