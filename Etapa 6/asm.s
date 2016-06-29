@@ -65,7 +65,7 @@ Ltmp5:
 	.globl	_a
 	.align	2
 _a:
-	.long	0
+	.long	5
 
 	.globl	_b
 	.align	2
